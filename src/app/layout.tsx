@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import GlobalContextProvider from '@/contexts/GlobalContextProvider'
 
 export const metadata: Metadata = {
   title: 'Procreate App',
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body>
-        <main className='max-w-screen-xl mx-auto'>{children}</main>
+        <GlobalContextProvider>
+          <main>{children}</main>
+        </GlobalContextProvider>
       </body>
     </html>
   )

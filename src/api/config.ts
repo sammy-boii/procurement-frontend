@@ -3,8 +3,9 @@
 import axios from 'axios'
 import { BASE_API_URL } from '../constants'
 import { cookies } from 'next/headers'
+import chalk from 'chalk'
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: BASE_API_URL,
   timeout: 10 * 1000
 })
@@ -22,5 +23,8 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (res) => res,
-  (error) => Promise.reject(new Error(error.response.data?.message))
+  (error) => {
+    console.log(chalk.bgRed(`[ERROR] ${error.response.data?.message}`))
+    return Promise.reject(new Error(error.response.data?.message))
+  }
 )
