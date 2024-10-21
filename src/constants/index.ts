@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
+import { Calendar, Home, Inbox, LayoutList, User } from 'lucide-react'
 
 export const BASE_API_URL =
   process.env.NODE_ENV === 'development'
@@ -8,12 +8,12 @@ export const BASE_API_URL =
 export const sidebarLinks = [
   {
     title: 'Home',
-    url: '#',
+    url: '/',
     icon: Home
   },
   {
     title: 'Inbox',
-    url: '#',
+    url: '/inbox',
     icon: Inbox
   },
   {
@@ -22,13 +22,14 @@ export const sidebarLinks = [
     icon: Calendar
   },
   {
-    title: 'Search',
-    url: '#',
-    icon: Search
+    title: 'Requisitions',
+    url: '/requisitions',
+    icon: LayoutList
   },
+
   {
-    title: 'Settings',
-    url: '#',
-    icon: Settings
+    title: 'Profile',
+    url: '/profile',
+    icon: User
   }
 ]

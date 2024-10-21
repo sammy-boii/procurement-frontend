@@ -6,10 +6,9 @@ export default function AppLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className='flex'>
+    <div className='flex gap-4'>
       <MainSidebar />
-      <div>Hello</div>
-      <main>hekki</main>
+      <main className='grow'>{children}</main>
     </div>
   )
 }

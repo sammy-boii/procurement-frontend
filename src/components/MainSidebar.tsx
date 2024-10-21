@@ -13,23 +13,26 @@ import {
   SidebarTrigger
 } from '@/components/ui/sidebar'
 import { sidebarLinks } from '@/constants'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function MainSidebar() {
+  const pathName = usePathname()
+
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {sidebarLinks.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                    <SidebarMenuButton isActive={item.url === pathName} asChild>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
