@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import GlobalContextProvider from '@/contexts/GlobalContextProvider'
+import { poppins } from '@/lib/fonts'
 
 export const metadata: Metadata = {
   title: 'Procreate App',

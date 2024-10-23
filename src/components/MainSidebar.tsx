@@ -6,42 +6,45 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger
+  SidebarMenuItem
 } from '@/components/ui/sidebar'
 import { sidebarLinks } from '@/constants'
-import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import heraldLogo from '../../public/assets/herald-logo.png'
 
 export default function MainSidebar() {
   const pathName = usePathname()
-
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {sidebarLinks.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton isActive={item.url === pathName} asChild>
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarTrigger />
-    </SidebarProvider>
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarHeader>
+            <Image src={heraldLogo} alt='logo' />
+          </SidebarHeader>
+          <SidebarGroupContent className='mt-12'>
+            <SidebarMenu>
+              {sidebarLinks.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    className='h-10'
+                    isActive={pathName === item.url}
+                    asChild
+                  >
+                    <a href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   )
 }

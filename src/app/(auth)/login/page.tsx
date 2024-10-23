@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import { TLogin } from '@/types/auth'
+import { TLogin } from '@/types/auth.types'
 import { loginSchema } from '@/schemas/auth-schema'
 import { loginAction } from '@/api/actions/user-actions'
 import Cookies from 'js-cookie'

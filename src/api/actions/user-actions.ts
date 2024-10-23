@@ -1,6 +1,6 @@
 'use server'
 
-import { TLogin, TSignUp } from '@/types/auth'
+import { TLogin, TSignUp } from '@/types/auth.types'
 import { axiosInstance } from '../config'
 
 export const loginAction = async (data: TLogin) => {

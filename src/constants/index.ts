@@ -1,35 +1,22 @@
-import { Calendar, Home, Inbox, LayoutList, User } from 'lucide-react'
+import { ISidebarLinks } from '@/types'
+import { LayoutList, Truck } from 'lucide-react'
 
 export const BASE_API_URL =
   process.env.NODE_ENV === 'development'
     ? process.env.NEXT_PUBLIC_DEV_API_URL
     : process.env.NEXT_PUBLIC_PROD_API_URL
 
-export const sidebarLinks = [
+export const ITEM_STATUS = ['PENDING', 'APPROVED', 'REJECTED'] as const
+
+export const sidebarLinks: ISidebarLinks[] = [
   {
-    title: 'Home',
+    title: 'Procurements',
     url: '/',
-    icon: Home
+    icon: Truck
   },
   {
-    title: 'Inbox',
-    url: '/inbox',
-    icon: Inbox
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar
-  },
-  {
-    title: 'Requisitions',
+    title: 'My Requisitions',
     url: '/requisitions',
     icon: LayoutList
-  },
-
-  {
-    title: 'Profile',
-    url: '/profile',
-    icon: User
   }
-]
+] as const
