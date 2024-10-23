@@ -1,19 +1,16 @@
 import { z } from 'zod'
-import { purchaseOrderItemSchema } from './purhcaseOrder-schema'
 import { ITEM_STATUS } from '@/constants'
+import {
+  purchaseOrderItemSchema,
+  supplierVendorInformationSchema
+} from './purchaseOrder.schema'
 
-export const supplierVendorInformationSchema = z.object({
-  name: z.string().optional(),
-  address: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  contactPerson: z.string().optional()
-})
-
-export const requisitionSchema = z.object({
+const procurementSchema = z.object({
   requisitionNo: z.string().min(1, 'Requisition number is required'),
   requisitionDate: z.date(),
   requestor: z.string().min(1, 'Requestor reference is required'),
   requestType: z.string().min(1, 'Request type is required'),
+  department: z.string().min(1, 'Department is required'),
   expenseType: z.string().min(1, 'Expense type is required'),
   purpose: z.string().min(1, 'Purpose is required'),
   supplierVendorInformation: supplierVendorInformationSchema.optional(),
@@ -32,3 +29,5 @@ export const requisitionSchema = z.object({
     })
     .optional()
 })
+
+export { procurementSchema }
