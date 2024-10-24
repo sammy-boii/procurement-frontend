@@ -1,37 +1,37 @@
-import { UseFormReturn } from 'react-hook-form'
+import { UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import DeleteItems from '../btns/DeleteItems'
-import { TPurchaseOrderItem } from '@/types/purchaseOrder.types'
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import DeleteItems from "../btns/DeleteItems";
+import { TPurchaseOrderItem } from "@/types/purchaseOrder.types";
 
 const ItemsRow = ({
   form,
-  items,
+  item,
   index,
-  handleRemoveItem
+  handleRemoveItem,
 }: {
-  items: TPurchaseOrderItem[]
-  handleRemoveItem: (index: number) => void
-  index: number
-  form: UseFormReturn<any, any, undefined>
+  item: TPurchaseOrderItem;
+  handleRemoveItem: (index: number) => void;
+  index: number;
+  form: UseFormReturn<any, any, undefined>;
 }) => {
   return (
-    <div className='flex items-baseline gap-3'>
-      <div className='flex relative gap-x-16'>
+    <div className="flex items-baseline gap-3">
+      <div className="flex relative gap-x-16">
         <FormField
           control={form.control}
-          name='items.name'
+          name={`item.${index}.name`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Item</FormLabel>
               <FormControl>
-                <Input required placeholder='Enter item name' {...field} />
+                <Input required placeholder="Enter item name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -39,54 +39,55 @@ const ItemsRow = ({
         />
         <FormField
           control={form.control}
-          name='items.quantity'
+          name={`item.${index}.quantity`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Quantity</FormLabel>
               <FormControl>
                 <Input
-                  type='number'
+                  type="number"
                   required
-                  placeholder='Enter quantity'
+                  placeholder="Enter quantity"
                   {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))} // Parse as number
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />{' '}
+        />{" "}
         <FormField
           control={form.control}
-          name='items.unitPrice'
+          name={`item.${index}.unitPrice`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Unit Price</FormLabel>
               <FormControl>
                 <Input
-                  type='number'
+                  type="number"
                   required
-                  placeholder='Enter unit price'
+                  placeholder="Enter unit price"
                   {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))} // Parse as number
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />{' '}
+        />{" "}
         <FormField
           control={form.control}
-          name='items.totalPrice'
+          name={`item.${index}.totalPrice`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Total Price</FormLabel>
               <FormControl>
                 <Input
-                  disabled
-                  placeholder='Enter item name'
+                  placeholder="Enter item name"
                   {...field}
                   value={
-                    form.getValues('items.quantity') *
-                    form.getValues('items.unitPrice')
+                    form.getValues(`item.${index}.quantity`) *
+                    form.getValues(`item.${index}.unitPrice`)
                   }
                 />
               </FormControl>
@@ -96,12 +97,12 @@ const ItemsRow = ({
         />
       </div>
       <DeleteItems
-        className='self-end justify-self-center'
+        className="self-end justify-self-center"
         handleRemoveItem={handleRemoveItem}
         index={index}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ItemsRow
+export default ItemsRow;

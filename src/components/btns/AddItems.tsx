@@ -2,12 +2,13 @@
 
 import { Plus } from 'lucide-react'
 import { Button } from '../ui/button'
+import { newItem } from '@/app/(main)/create-procurement/page'
 
-const AddItems = ({ setItems }: { setItems: () => void }) => {
+const AddItems = ({ handleAddItem }: { handleAddItem: any }) => {
   return (
     <Button
       type='button'
-      onClick={setItems}
+      onClick={() => handleAddItem(newItem)}
       className='flex items-center gap-2'
     >
       <Plus size={16} />

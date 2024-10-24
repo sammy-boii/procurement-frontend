@@ -6,7 +6,7 @@ import { Form, FormField } from '@/components/ui/form'
 import { TProcurement } from '@/types/procurement.types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { Calendar } from '@/components/ui/calendar'
 
 import { Button } from '@/components/ui/button'
@@ -32,7 +32,7 @@ import AddItems from '@/components/btns/AddItems'
 import { TPurchaseOrderItem } from '@/types/purchaseOrder.types'
 import ItemsRow from '@/components/elements/ItemsRow'
 
-const newItem: TPurchaseOrderItem = {
+export const newItem: TPurchaseOrderItem = {
   name: '',
   quantity: 0,
   totalPrice: 0,
@@ -40,27 +40,36 @@ const newItem: TPurchaseOrderItem = {
 }
 
 const CreateProcurement = () => {
-  const [items, setItems] = useState<TPurchaseOrderItem[]>([newItem])
+  // const [items, setItems] = useState<TPurchaseOrderItem[]>([newItem])
 
   const form = useForm<TProcurement>({
     resolver: zodResolver(procurementSchema),
     defaultValues: {
-      requestor: 'Sam'
+      requestor: 'Sam',
+      items: [newItem],
     }
   })
 
+  const {fields: itemsFields, append: appendItem, remove: removeItem} = useFieldArray({
+    control: form.control,
+    name: 'items'
+  })
+
   function onSubmit(data: TProcurement) {
-    console.log(data, items, 'data')
+    console.log(data, 'data')
   }
 
-  function handleAddItem() {
-    setItems((prev) => [...prev, newItem])
-  }
+  
 
-  function handleRemoveItem(index: number) {
-    setItems((prev) => prev.filter((_, i) => i !== index))
-  }
+  // function handleAddItem() {
+  //   setItems((prev) => [...prev, newItem])
+  // }
 
+  // function handleRemoveItem(index: number) {
+  //   setItems((prev) => prev.filter((_, i) => i !== index))
+  // }
+
+  console.log(form.formState.errors, 'errors')
   return (
     <main className='mt-12'>
       <BackButton />
@@ -201,16 +210,16 @@ const CreateProcurement = () => {
 
           <RequiredFormTitle title='Procurement Request' />
           <section className='w-full space-y-10'>
-            {items.map((item, index) => (
+            {itemsFields.map((item, index) => (
               <ItemsRow
-                items={items}
+                item={item}
                 form={form}
                 index={index}
-                handleRemoveItem={handleRemoveItem}
+                handleRemoveItem={removeItem}
                 key={index}
               />
             ))}
-            <AddItems setItems={handleAddItem} />
+            <AddItems handleAddItem={appendItem} />
           </section>
 
           <OptionalFormTitle title='Vendor Information' />
