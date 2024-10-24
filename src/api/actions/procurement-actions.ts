@@ -1,9 +1,9 @@
 'use server'
 
-import { TRequisition } from '@/types/requisition.types'
+import { TProcurement } from '@/types/procurement.types'
 import { axiosInstance } from '../config'
 
-export const createRequisition = async (data: TRequisition) => {
+export const createRequisition = async (data: TProcurement) => {
   const res = await axiosInstance.post('/api/requisitions', data)
   return res.data
 }
@@ -18,7 +18,7 @@ export const getRequisition = async (id: string) => {
   return res.data
 }
 
-export const updateRequisition = async (id: string, data: TRequisition) => {
+export const updateRequisition = async (id: string, data: TProcurement) => {
   const res = await axiosInstance.put(`/api/requisitions/${id}`, data)
   return res.data
 }

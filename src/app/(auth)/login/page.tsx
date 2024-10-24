@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import { TLogin } from '@/types/auth.types'
-import { loginSchema } from '@/schemas/auth-schema'
+import { loginSchema } from '@/schemas/auth.schema'
 import { loginAction } from '@/api/actions/user-actions'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'

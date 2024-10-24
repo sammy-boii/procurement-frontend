@@ -1,7 +1,7 @@
 import {
   purchaseOrderItemSchema,
   purchaseOrderSchema
-} from '@/schemas/purhcaseOrder-schema'
+} from '@/schemas/purchaseOrder.schema'
 import z from 'zod'
 
 export type IPuchaseOrder = z.infer<typeof purchaseOrderSchema>

@@ -2,7 +2,7 @@
 
 import { Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
-import { deleteRequisition } from '@/api/actions/requisitions-actions'
+import { deleteRequisition } from '@/api/actions/procurement-actions'
 
 const DeleteProcurement = ({ id }: { id: string }) => {
   return (

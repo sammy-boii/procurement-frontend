@@ -15,12 +15,19 @@ import { sidebarLinks } from '@/constants'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import heraldLogo from '../../public/assets/herald-logo.png'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import { Command } from 'lucide-react'
 
 export default function MainSidebar() {
   const pathName = usePathname()
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className='overflow-visible relative'>
         <SidebarGroup>
           <SidebarHeader>
             <Image src={heraldLogo} alt='logo' />
@@ -44,6 +51,15 @@ export default function MainSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <SidebarTrigger className='absolute -right-8 top-6' />
+          </TooltipTrigger>
+          <TooltipContent className='flex text-sm font-bold gap-1 items-center'>
+            <Command size={16} />
+            <p className=''>+ B</p>
+          </TooltipContent>
+        </Tooltip>
       </SidebarContent>
     </Sidebar>
   )

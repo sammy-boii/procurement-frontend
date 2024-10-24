@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import { signUpSchema } from '@/schemas/auth-schema'
+import { signUpSchema } from '@/schemas/auth.schema'
 import { TSignUp } from '@/types/auth.types'
 import { registerAction } from '@/api/actions/user-actions'
 import { useRouter } from 'next/navigation'

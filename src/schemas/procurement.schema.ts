@@ -1,9 +1,10 @@
 import { z } from 'zod'
-import { ITEM_STATUS } from '@/constants'
 import {
   purchaseOrderItemSchema,
   supplierVendorInformationSchema
 } from './purchaseOrder.schema'
+
+const STATUS = ['PENDING', 'APPROVED', 'REJECTED'] as const
 
 const procurementSchema = z.object({
   requisitionNo: z.string().min(1, 'Requisition number is required'),
@@ -23,9 +24,9 @@ const procurementSchema = z.object({
     .optional(),
   verificationStatus: z
     .object({
-      level1: z.enum(ITEM_STATUS).default('PENDING'),
-      level2: z.enum(ITEM_STATUS).default('PENDING'),
-      finalStatus: z.enum(ITEM_STATUS).default('PENDING')
+      level1: z.enum(STATUS).default('PENDING'),
+      level2: z.enum(STATUS).default('PENDING'),
+      finalStatus: z.enum(STATUS).default('PENDING')
     })
     .optional()
 })

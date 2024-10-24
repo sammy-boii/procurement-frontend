@@ -282,7 +282,7 @@ const SidebarTrigger = React.forwardRef<
       <ChevronsRight
         className={cn(
           open && 'rotate-180',
-          'transition-all duration-300 scale-[1.5]'
+          'transition-all opacity-50 hover:opacity-100 duration-300 scale-[1.5]'
         )}
       />
       <span className='sr-only'>Toggle Sidebar</span>
