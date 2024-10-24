@@ -25,8 +25,8 @@ export const dummyData: TProcurement[] = [
     },
     verificationStatus: {
       level1: 'APPROVED',
-      level2: 'PENDING',
-      finalStatus: 'PENDING'
+      level2: 'REJECTED',
+      finalStatus: 'REJECTED'
     }
   },
   {

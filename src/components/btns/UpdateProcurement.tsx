@@ -3,10 +3,10 @@
 import { PencilLine } from 'lucide-react'
 import { Button } from '../ui/button'
 
-const UpdateProcurement = () => {
+const UpdateProcurement = ({ id }: { id: string }) => {
   return (
-    <Button variant={'secondary'} className='w-10 h-8'>
-      <PencilLine size={16} />
+    <Button variant={'actions'} className='hover:bg-[#e0f0fa] text-secondary'>
+      <PencilLine />
     </Button>
   )
 }

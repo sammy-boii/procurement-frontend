@@ -46,11 +46,15 @@ const CreateProcurement = () => {
     resolver: zodResolver(procurementSchema),
     defaultValues: {
       requestor: 'Sam',
-      items: [newItem],
+      items: [newItem]
     }
   })
 
-  const {fields: itemsFields, append: appendItem, remove: removeItem} = useFieldArray({
+  const {
+    fields: itemsFields,
+    append: appendItem,
+    remove: removeItem
+  } = useFieldArray({
     control: form.control,
     name: 'items'
   })
@@ -58,8 +62,6 @@ const CreateProcurement = () => {
   function onSubmit(data: TProcurement) {
     console.log(data, 'data')
   }
-
-  
 
   // function handleAddItem() {
   //   setItems((prev) => [...prev, newItem])

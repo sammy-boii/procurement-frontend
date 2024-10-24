@@ -9,18 +9,18 @@ export const BASE_API_URL =
 export const ITEM_STATUS = {
   PENDING: {
     name: 'PENDING',
-    color: 'hsl(39, 100%, 60%)', // HSL for a vibrant orange
-    bgColor: 'hsla(39, 100%, 60%, 0.2)' // 20% opacity
+    color: 'hsl(39, 100%, 50%)',
+    bgColor: 'hsla(39, 100%, 60%, 0.2)'
   },
   REJECTED: {
     name: 'REJECTED',
-    color: 'hsl(4, 100%, 60%)', // HSL for a vibrant red
-    bgColor: 'hsla(4, 100%, 60%, 0.2)' // 20% opacity
+    color: 'hsl(4, 100%, 60%)',
+    bgColor: 'hsla(4, 100%, 60%, 0.2)'
   },
   APPROVED: {
     name: 'APPROVED',
-    color: 'hsl(120, 60%, 40%)', // HSL for a rich green
-    bgColor: 'hsla(120, 60%, 40%, 0.2)' // 20% opacity
+    color: 'hsl(120, 60%, 40%)',
+    bgColor: 'hsla(120, 60%, 40%, 0.2)'
   }
 } as const
 

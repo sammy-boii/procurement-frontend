@@ -2,18 +2,11 @@
 
 import { ColumnDef } from '@tanstack/react-table'
 import { TProcurement } from '@/types/procurement.types'
-import { Button } from '@/components/ui/button'
-import { MoreHorizontal } from 'lucide-react'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import { ITEM_STATUS } from '@/constants'
+import UpdateProcurement from '@/components/btns/UpdateProcurement'
+import DeleteProcurement from '@/components/btns/DeleteProcurement'
+import ViewProcurement from '@/components/btns/ViewProcurement'
 
 export const columns: ColumnDef<TProcurement>[] = [
   {
@@ -38,30 +31,33 @@ export const columns: ColumnDef<TProcurement>[] = [
         row.original.verificationStatus?.finalStatus || 'PENDING'
       const statusInfo = ITEM_STATUS[statusKey]
 
-      return <div>{statusInfo.name}</div>
+      return (
+        <div
+          style={{
+            backgroundColor: statusInfo.bgColor,
+            color: statusInfo.color,
+            width: 'fit-content',
+            fontSize: '12px',
+            fontWeight: '500',
+            borderRadius: '4px'
+          }}
+          className='px-2 rounded-xl py-1'
+        >
+          {statusInfo.name}
+        </div>
+      )
     }
   },
   {
     header: 'Actions',
     id: 'actions',
     cell: ({ row }) => {
-      const payment = row.original
-
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <UpdateProcurement id={''} />
+          <DeleteProcurement id={''} />
+          <ViewProcurement id={''} />
+        </>
       )
     }
   }

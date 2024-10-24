@@ -8,8 +8,8 @@ const DeleteProcurement = ({ id }: { id: string }) => {
   return (
     <Button
       onClick={() => deleteRequisition(id)}
-      variant={'destructive'}
-      className='w-10 h-8'
+      variant={'actions'}
+      className='text-destructive'
     >
       <Trash2 />
     </Button>
