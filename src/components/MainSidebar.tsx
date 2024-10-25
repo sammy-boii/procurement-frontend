@@ -53,7 +53,7 @@ export default function MainSidebar() {
         </SidebarGroup>
         <Tooltip>
           <TooltipTrigger asChild>
-            <SidebarTrigger className='absolute -right-9 top-6' />
+            <SidebarTrigger className='absolute -right-9 top-1' />
           </TooltipTrigger>
           <TooltipContent className='flex text-sm font-bold gap-1 items-center'>
             <Command size={16} />

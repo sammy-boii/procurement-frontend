@@ -39,6 +39,7 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
+  paginated?: boolean
   asChild?: boolean
 }
 
@@ -47,6 +48,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       variant,
+      paginated = false,
       size,
       disabled = false,
       asChild = false,
@@ -63,7 +65,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         {...props}
       >
-        {disabled ? <LoaderCircle className='animate-spin' /> : children}
+        {!paginated && disabled ? (
+          <LoaderCircle className='animate-spin' />
+        ) : (
+          children
+        )}
       </Comp>
     )
   }

@@ -17,8 +17,8 @@ const DeleteItems = ({
     <Button
       type='button'
       onClick={() => {
-        console.log('Delete item', index)
-        handleRemoveItem(index)}}
+        handleRemoveItem(index)
+      }}
       variant={'destructive'}
       className={cn('w-10 -translate-y-1 h-8', className)}
     >

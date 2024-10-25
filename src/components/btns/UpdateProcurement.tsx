@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 
 const UpdateProcurement = ({ id }: { id: string }) => {
   return (
-    <Button variant={'actions'} className='hover:bg-[#e0f0fa] text-secondary'>
+    <Button variant={'actions'} className='hover:bg-blue-200 text-secondary'>
       <PencilLine />
     </Button>
   )

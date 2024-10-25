@@ -4,6 +4,7 @@ import { Truck } from 'lucide-react'
 import { DataTable } from './data-table'
 import { dummyData } from '@/lib/dummyData'
 import { columns } from './columns'
+import { useEffect, useRef } from 'react'
 
 export default function HomePage() {
   return (

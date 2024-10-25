@@ -10,7 +10,6 @@ const procurementSchema = z.object({
   requisitionNo: z.string().min(1, 'Requisition number is required'),
   requisitionDate: z.date(),
   requestor: z.string().min(1, 'Requestor reference is required'),
-  // requestType: z.string().min(1, 'Request type is required'),
   department: z.string().min(1, 'Department is required'),
   expenseType: z.string().min(1, 'Expense type is required'),
   purpose: z.string().min(1, 'Purpose is required'),

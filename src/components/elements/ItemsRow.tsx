@@ -1,37 +1,39 @@
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from 'react-hook-form'
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import DeleteItems from "../btns/DeleteItems";
-import { TPurchaseOrderItem } from "@/types/purchaseOrder.types";
+  FormMessage
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import DeleteItems from '../btns/DeleteItems'
 
 const ItemsRow = ({
   form,
-  item,
   index,
-  handleRemoveItem,
+  handleRemoveItem
 }: {
-  item: TPurchaseOrderItem;
-  handleRemoveItem: (index: number) => void;
-  index: number;
-  form: UseFormReturn<any, any, undefined>;
+  handleRemoveItem: (index: number) => void
+  index: number
+  form: UseFormReturn<any, any, undefined>
 }) => {
+  const quantity = form.watch(`items.${index}.quantity`)
+  const unitPrice = form.watch(`items.${index}.unitPrice`)
+
+  const totalPrice = quantity * unitPrice
+
   return (
-    <div className="flex items-baseline gap-3">
-      <div className="flex relative gap-x-16">
+    <div className='flex items-baseline gap-3'>
+      <div className='flex relative gap-x-16'>
         <FormField
           control={form.control}
-          name={`item.${index}.name`}
+          name={`items.${index}.name`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Item</FormLabel>
               <FormControl>
-                <Input required placeholder="Enter item name" {...field} />
+                <Input required placeholder='Enter item name' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -39,57 +41,58 @@ const ItemsRow = ({
         />
         <FormField
           control={form.control}
-          name={`item.${index}.quantity`}
+          name={`items.${index}.quantity`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Quantity</FormLabel>
               <FormControl>
                 <Input
-                  type="number"
+                  type='number'
                   required
-                  placeholder="Enter quantity"
+                  min={0}
+                  placeholder='Enter quantity'
                   {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))} // Parse as number
+                  onChange={(e) => {
+                    const value = Number(e.target.value)
+                    field.onChange(value)
+                  }}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
         <FormField
           control={form.control}
-          name={`item.${index}.unitPrice`}
+          name={`items.${index}.unitPrice`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Unit Price</FormLabel>
               <FormControl>
                 <Input
-                  type="number"
+                  type='number'
+                  min={0}
                   required
-                  placeholder="Enter unit price"
+                  placeholder='Enter unit price'
                   {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))} // Parse as number
+                  onChange={(e) => {
+                    const value = Number(e.target.value)
+                    field.onChange(value)
+                  }}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />{" "}
+        />
         <FormField
           control={form.control}
-          name={`item.${index}.totalPrice`}
+          name={`items.${index}.totalPrice`}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Total Price</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter item name"
-                  {...field}
-                  value={
-                    form.getValues(`item.${index}.quantity`) *
-                    form.getValues(`item.${index}.unitPrice`)
-                  }
-                />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,12 +100,12 @@ const ItemsRow = ({
         />
       </div>
       <DeleteItems
-        className="self-end justify-self-center"
+        className='self-end justify-self-center'
         handleRemoveItem={handleRemoveItem}
         index={index}
       />
     </div>
-  );
-};
+  )
+}
 
-export default ItemsRow;
+export default ItemsRow

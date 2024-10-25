@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 
 const ViewProcurement = ({ id }: { id: string }) => {
   return (
-    <Button variant={'actions'} className='hover:bg-gray-200'>
+    <Button variant={'actions'} className='hover:bg-gray-300'>
       <BookOpen size={16} />
     </Button>
   )

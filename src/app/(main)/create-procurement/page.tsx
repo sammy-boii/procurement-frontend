@@ -5,7 +5,7 @@ import RequiredFormTitle from '@/components/elements/RequiredFormTitle'
 import { Form, FormField } from '@/components/ui/form'
 import { TProcurement } from '@/types/procurement.types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
+import React from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { Calendar } from '@/components/ui/calendar'
 
@@ -40,8 +40,6 @@ export const newItem: TPurchaseOrderItem = {
 }
 
 const CreateProcurement = () => {
-  // const [items, setItems] = useState<TPurchaseOrderItem[]>([newItem])
-
   const form = useForm<TProcurement>({
     resolver: zodResolver(procurementSchema),
     defaultValues: {
@@ -63,15 +61,6 @@ const CreateProcurement = () => {
     console.log(data, 'data')
   }
 
-  // function handleAddItem() {
-  //   setItems((prev) => [...prev, newItem])
-  // }
-
-  // function handleRemoveItem(index: number) {
-  //   setItems((prev) => prev.filter((_, i) => i !== index))
-  // }
-
-  console.log(form.formState.errors, 'errors')
   return (
     <main className='mt-12'>
       <BackButton />
@@ -212,9 +201,8 @@ const CreateProcurement = () => {
 
           <RequiredFormTitle title='Procurement Request' />
           <section className='w-full space-y-10'>
-            {itemsFields.map((item, index) => (
+            {itemsFields.map((_, index) => (
               <ItemsRow
-                item={item}
                 form={form}
                 index={index}
                 handleRemoveItem={removeItem}
@@ -233,7 +221,7 @@ const CreateProcurement = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input required placeholder='Enter name' {...field} />
+                    <Input placeholder='Enter name' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -246,7 +234,7 @@ const CreateProcurement = () => {
                 <FormItem>
                   <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Input required placeholder='Enter address' {...field} />
+                    <Input placeholder='Enter address' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -259,11 +247,7 @@ const CreateProcurement = () => {
                 <FormItem>
                   <FormLabel>Phone number</FormLabel>
                   <FormControl>
-                    <Input
-                      required
-                      placeholder='Enter phone number'
-                      {...field}
-                    />
+                    <Input placeholder='Enter phone number' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

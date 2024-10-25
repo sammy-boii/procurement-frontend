@@ -9,7 +9,7 @@ const DeleteProcurement = ({ id }: { id: string }) => {
     <Button
       onClick={() => deleteRequisition(id)}
       variant={'actions'}
-      className='text-destructive'
+      className='text-destructive hover:bg-red-200'
     >
       <Trash2 />
     </Button>
