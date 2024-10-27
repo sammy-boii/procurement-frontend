@@ -16,7 +16,7 @@ const PageHeading = ({
         <Logo size={19} />
         <h1 className='font-semibold tracking-tight text-3xl'>{title}</h1>
       </div>
-      <div className='text-primary text-[12px]'>{description}</div>
+      <div className='text-primary text-[12px] font-medium'>{description}</div>
     </div>
   )
 }

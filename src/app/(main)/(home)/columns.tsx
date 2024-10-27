@@ -41,8 +41,12 @@ export const columns: ColumnDef<TProcurement>[] = [
     cell: ({ row }) => <div>{row.original.department}</div>
   },
   {
-    accessorKey: 'verificationStatus.finalStatus',
+    accessorKey: 'verificationStatus',
     header: 'Final Status',
+    filterFn: (row, columnId, filterValue) => {
+      const finalStatus = row.original.verificationStatus?.finalStatus
+      return filterValue === 'ALL' || finalStatus === filterValue
+    },
     cell: ({ row }) => {
       const statusKey =
         row.original.verificationStatus?.finalStatus || 'PENDING'

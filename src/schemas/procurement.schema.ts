@@ -15,6 +15,7 @@ const procurementSchema = z.object({
   purpose: z.string().min(1, 'Purpose is required'),
   supplierVendorInformation: supplierVendorInformationSchema.optional(),
   items: z.array(purchaseOrderItemSchema),
+  totalNetPrice: z.number(),
   approvedBy: z
     .object({
       level1: z.string().optional(),

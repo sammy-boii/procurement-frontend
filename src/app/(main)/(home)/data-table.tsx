@@ -34,7 +34,11 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { Command } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Command } from 'lucide-react'
+import { ITEM_STATUS } from '@/constants'
+import { cn } from '@/lib/utils'
+
+type STATUS = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -52,6 +56,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [filterValue, setFilterValue] = useState('')
+  const [statusFilter, setStatusFilter] = useState<STATUS>('ALL')
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -75,6 +81,23 @@ export function DataTable<TData, TValue>({
     { value: 'department', name: 'Department' },
     { value: 'requisitionNo', name: 'Requisition No' }
   ]
+
+  const handleFilterFieldChange = (val: string) => {
+    if (filterField) {
+      table.getColumn(filterField)?.setFilterValue('')
+    }
+    setFilterField(val as keyof TProcurement)
+    setFilterValue('')
+    inputRef.current?.focus()
+  }
+
+  const handleStatusChange = (status: STATUS) => {
+    setStatusFilter(status)
+    table
+      .getColumn('verificationStatus')
+      ?.setFilterValue(status === 'ALL' ? '' : status)
+  }
+
   const table = useReactTable({
     data,
     columns,
@@ -92,35 +115,63 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className='flex justify-between py-4 mb-2'>
-        <div className='relative text-sm'>
-          <div className='absolute bg-slate-200 p-1 rounded-sm right-[6px] top-[6px] font-semibold opacity-70 flex gap-1 items-center'>
-            <Command size={14} />
-            <span>K</span>
+      <div className='flex items-center justify-between py-4 mb-2'>
+        <div className='flex items-center gap-4'>
+          <div className='relative text-sm'>
+            <div className='absolute bg-slate-200 p-1 rounded-sm right-[6px] top-[6px] font-semibold opacity-70 flex gap-1 items-center'>
+              <Command size={14} />
+              <span>K</span>
+            </div>
+            <Input
+              ref={inputRef}
+              placeholder={`Search by ${filterField}`}
+              value={filterValue}
+              onChange={(e) => {
+                setFilterValue(e.target.value)
+                table.getColumn(filterField)?.setFilterValue(e.target.value)
+              }}
+              className='h-10 max-w-sm'
+            />
           </div>
-          <Input
-            ref={inputRef}
-            placeholder={`Search by ${filterField}`}
-            value={
-              (table.getColumn(filterField)?.getFilterValue() as string) ?? ''
-            }
-            onChange={(e) =>
-              table.getColumn(filterField)?.setFilterValue(e.target.value)
-            }
-            className='h-10 max-w-sm'
-          />
+
+          <Select value={filterField} onValueChange={handleFilterFieldChange}>
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Search Filters' />
+            </SelectTrigger>
+            <SelectContent>
+              {filterableFields.map((field) => (
+                <SelectItem key={field.value} value={field.value}>
+                  {field.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Select
-          onValueChange={(val) => setFilterField(val as keyof TProcurement)}
+          value={statusFilter}
+          onValueChange={(val) => handleStatusChange(val as STATUS)}
         >
           <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder='Search Filters' />
+            <SelectValue placeholder='Filter by Status' />
           </SelectTrigger>
           <SelectContent>
-            {filterableFields.map((field) => (
-              <SelectItem key={field.value} value={field.value}>
-                {field.name}
+            {/* "All" option with a fixed style */}
+            <SelectItem className='bg-gray-100 text-gray-800' value='ALL'>
+              All
+            </SelectItem>
+
+            {/* Map over ITEM_STATUS and apply inline styles */}
+            {Object.values(ITEM_STATUS).map((status) => (
+              <SelectItem
+                key={status.name}
+                value={status.name}
+                style={{
+                  color: status.color
+                }}
+              >
+                {status.name.charAt(0) +
+                  status.name.slice(1).toLocaleLowerCase()}
               </SelectItem>
             ))}
           </SelectContent>
@@ -177,24 +228,24 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
+      <div className='flex items-center justify-center space-x-2 py-4'>
         <Button
           variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
           paginated
+          onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          <ChevronLeft />
+          <span>Previous</span>
         </Button>
         <Button
           variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
           paginated
+          onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          <span>Next</span>
+          <ChevronRight />
         </Button>
       </div>
     </div>

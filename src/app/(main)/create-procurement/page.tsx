@@ -39,13 +39,10 @@ export const newItem: TPurchaseOrderItem = {
   unitPrice: 0
 }
 
-const CreateProcurement = () => {
+const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
   const form = useForm<TProcurement>({
     resolver: zodResolver(procurementSchema),
-    defaultValues: {
-      requestor: 'Sam',
-      items: [newItem]
-    }
+    defaultValues: defaultData
   })
 
   const {
