@@ -6,7 +6,11 @@ import { Children } from 'react'
 import { dummyData } from '@/lib/dummyData'
 import { cn } from '@/lib/utils'
 
-export default function ViewProcurementPage({ id }: { id: string }) {
+export default function ViewProcurementPage({
+  params: { id }
+}: {
+  params: { id: string }
+}) {
   const data = dummyData[0]
 
   return (

@@ -42,7 +42,10 @@ export const newItem: TPurchaseOrderItem = {
 const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
   const form = useForm<TProcurement>({
     resolver: zodResolver(procurementSchema),
-    defaultValues: defaultData
+    defaultValues: {
+      totalNetPrice: 0,
+      requestor: 'Sam'
+    }
   })
 
   const {
@@ -55,7 +58,20 @@ const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
   })
 
   function onSubmit(data: TProcurement) {
-    console.log(data, 'data')
+    if (data.items.length === 0) {
+      form.setError('items', {
+        type: 'required',
+        message: 'At least one item is required'
+      })
+      return
+    }
+
+    const totalNetPrice = data.items.reduce(
+      (sum, item) => sum + item.totalPrice,
+      0
+    )
+
+    console.log('Submitted', data, totalNetPrice)
   }
 
   return (
@@ -154,7 +170,6 @@ const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
               )}
             />
           </section>
-
           <RequiredFormTitle title='Expenses Information' />
           <section className='grid grid-cols-1 gap-y-7 gap-x-10 w-full'>
             <FormField
@@ -195,7 +210,6 @@ const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
               )}
             />
           </section>
-
           <RequiredFormTitle title='Procurement Request' />
           <section className='w-full space-y-10'>
             {itemsFields.map((_, index) => (
@@ -207,8 +221,13 @@ const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
               />
             ))}
             <AddItems handleAddItem={appendItem} />
-          </section>
 
+            {form.formState.errors.items && (
+              <p className='text-destructive text-sm'>
+                {form.formState.errors.items.message}
+              </p>
+            )}
+          </section>
           <OptionalFormTitle title='Vendor Information' />
           <section className='grid grid-cols-1 md:grid-cols-2 gap-y-7 gap-x-10 w-[80%]'>
             <FormField
@@ -295,7 +314,6 @@ const CreateProcurement = ({ defaultData }: { defaultData?: TProcurement }) => {
               )}
             />
           </section>
-
           <Button
             className='w-fit my-12'
             disabled={form.formState.isSubmitting}

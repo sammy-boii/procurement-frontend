@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import DeleteItems from '../btns/DeleteItems'
+import { useEffect } from 'react'
 
 const ItemsRow = ({
   form,
@@ -21,7 +22,11 @@ const ItemsRow = ({
   const quantity = form.watch(`items.${index}.quantity`)
   const unitPrice = form.watch(`items.${index}.unitPrice`)
 
-  const totalPrice = quantity * unitPrice
+  useEffect(() => {
+    const totalPrice = quantity * unitPrice
+    form.setValue(`items[${index}].totalPrice`, totalPrice || 0)
+    console.log('AA')
+  }, [quantity, unitPrice, form, index])
 
   return (
     <div className='flex items-baseline gap-3'>
@@ -72,6 +77,7 @@ const ItemsRow = ({
                 <Input
                   type='number'
                   min={0}
+                  step='any'
                   required
                   placeholder='Enter unit price'
                   {...field}
@@ -92,7 +98,7 @@ const ItemsRow = ({
             <FormItem>
               <FormLabel>Total Price</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} value={quantity * unitPrice} disabled />
               </FormControl>
               <FormMessage />
             </FormItem>
