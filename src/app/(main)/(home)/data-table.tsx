@@ -36,7 +36,6 @@ import {
 } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight, Command } from 'lucide-react'
 import { ITEM_STATUS } from '@/constants'
-import { cn } from '@/lib/utils'
 
 type STATUS = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
 
@@ -88,7 +87,6 @@ export function DataTable<TData, TValue>({
     }
     setFilterField(val as keyof TProcurement)
     setFilterValue('')
-    inputRef.current?.focus()
   }
 
   const handleStatusChange = (status: STATUS) => {
@@ -156,12 +154,10 @@ export function DataTable<TData, TValue>({
             <SelectValue placeholder='Filter by Status' />
           </SelectTrigger>
           <SelectContent>
-            {/* "All" option with a fixed style */}
             <SelectItem className='bg-gray-100 text-gray-800' value='ALL'>
               All
             </SelectItem>
 
-            {/* Map over ITEM_STATUS and apply inline styles */}
             {Object.values(ITEM_STATUS).map((status) => (
               <SelectItem
                 key={status.name}

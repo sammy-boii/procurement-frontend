@@ -43,7 +43,7 @@ export const columns: ColumnDef<TProcurement>[] = [
   {
     accessorKey: 'verificationStatus',
     header: 'Final Status',
-    filterFn: (row, columnId, filterValue) => {
+    filterFn: (row, _columnId, filterValue) => {
       const finalStatus = row.original.verificationStatus?.finalStatus
       return filterValue === 'ALL' || finalStatus === filterValue
     },
