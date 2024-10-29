@@ -25,12 +25,11 @@ const ItemsRow = ({
   useEffect(() => {
     const totalPrice = quantity * unitPrice
     form.setValue(`items[${index}].totalPrice`, totalPrice || 0)
-    console.log('AA')
   }, [quantity, unitPrice, form, index])
 
   return (
     <div className='flex items-baseline gap-3'>
-      <div className='flex relative gap-x-16'>
+      <div className='flex md:flex-row flex-col relative gap-x-16'>
         <FormField
           control={form.control}
           name={`items.${index}.name`}

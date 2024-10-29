@@ -30,7 +30,7 @@ export default function ViewProcurementPage({
       <section className='mt-12 text-sm font-light'>
         <div className='space-x-4'>
           <span className='text-primary font-semibold'>Requisition Date: </span>
-          <span>{data.requisitionDate.toLocaleDateString()}</span>
+          <span>{new Date(data.requisitionDate).toLocaleDateString()}</span>
         </div>
         <div className='space-x-[30px]'>
           <span className='font-semibold text-primary'>Requisition No: </span>
@@ -83,7 +83,10 @@ export default function ViewProcurementPage({
             <div className='space-x-2'>
               <span>Expected Delivery Date:</span>
               <span>
-                {data.supplierVendorInformation?.expectedDate?.toLocaleDateString() ||
+                {(data.supplierVendorInformation?.expectedDate &&
+                  new Date(
+                    data.supplierVendorInformation.expectedDate
+                  ).toDateString()) ||
                   'N/A'}
               </span>
             </div>

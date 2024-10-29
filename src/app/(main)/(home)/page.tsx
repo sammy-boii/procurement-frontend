@@ -2,12 +2,14 @@ import AddProcurement from '@/components/btns/AddProcurement'
 import PageHeading from '@/components/elements/PageHeading'
 import { Truck } from 'lucide-react'
 import { DataTable } from './data-table'
-import { dummyData } from '@/lib/dummyData'
 import { columns } from './columns'
+import { getProcurements } from '@/api/actions/procurement-actions'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const procurementRes = await getProcurements()
+
   return (
-    <main className=''>
+    <main>
       <header>
         <PageHeading
           title='Procurement'
@@ -21,7 +23,7 @@ export default function HomePage() {
       </header>
 
       <div className='container mx-auto py-10'>
-        <DataTable columns={columns} data={dummyData} />
+        <DataTable columns={columns} data={procurementRes.data} />
       </div>
     </main>
   )

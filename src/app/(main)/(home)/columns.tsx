@@ -31,7 +31,7 @@ export const columns: ColumnDef<TProcurement>[] = [
     },
     cell: ({ row }) => {
       const date = row.getValue('requisitionDate') as Date
-      const formattedDate = date.toLocaleDateString()
+      const formattedDate = new Date(date).toDateString()
       return <div className='w-fit text-center'>{formattedDate}</div>
     }
   },

@@ -14,12 +14,20 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import { signUpSchema } from '@/schemas/auth.schema'
+import { registerSchema } from '@/schemas/auth.schema'
 import { TSignUp } from '@/types/auth.types'
-import { registerAction } from '@/api/actions/user-actions'
+import { registerAction } from '@/api/actions/auth-actions'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
+import { DEPARTMENTS } from '@/constants'
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -27,7 +35,7 @@ const SignupPage = () => {
   const router = useRouter()
 
   const form = useForm<TSignUp>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -35,7 +43,6 @@ const SignupPage = () => {
       username: '',
       phoneNumber: '',
       name: '',
-      department: '',
       designation: ''
     }
   })
@@ -137,12 +144,18 @@ const SignupPage = () => {
               <FormItem>
                 <FormLabel>Department</FormLabel>
                 <FormControl>
-                  <Input
-                    type='text'
-                    required
-                    placeholder='Enter your department'
-                    {...field}
-                  />
+                  <Select onValueChange={field.onChange}>
+                    <SelectTrigger className='opacity-60'>
+                      <SelectValue placeholder='Select Department' />
+                    </SelectTrigger>
+                    <SelectContent className='text-gray-500 max-h-[200px]'>
+                      {DEPARTMENTS.map((department) => (
+                        <SelectItem key={department} value={department}>
+                          {department}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

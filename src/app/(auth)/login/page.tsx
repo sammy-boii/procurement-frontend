@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import { TLogin } from '@/types/auth.types'
 import { loginSchema } from '@/schemas/auth.schema'
-import { loginAction } from '@/api/actions/user-actions'
+import { loginAction } from '@/api/actions/auth-actions'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -38,14 +38,14 @@ const LoginPage = () => {
   async function onSubmit(data: TLogin) {
     try {
       const res = await loginAction(data)
-      Cookies.set('acc_token', res.token, { expires: 30 })
+      Cookies.set('at', res.data.token, { expires: 30 })
       router.replace('/')
     } catch (err) {
       toast.error((err as Error).message)
     }
   }
 
-  if (Cookies.get('acc_token')) router.replace('/')
+  if (Cookies.get('at')) router.replace('/')
 
   return (
     <main className='max-w-md grid mt-20 mx-auto'>

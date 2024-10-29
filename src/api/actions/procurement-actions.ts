@@ -3,27 +3,30 @@
 import { TProcurement } from '@/types/procurement.types'
 import { axiosInstance } from '../config'
 
-export const createRequisition = async (data: TProcurement) => {
-  const res = await axiosInstance.post('/api/requisitions', data)
+export const createProcurement = async (data: TProcurement) => {
+  const res = await axiosInstance.post('/procurement', data)
   return res.data
 }
 
-export const getRequisitions = async () => {
-  const res = await axiosInstance.get('/api/requisitions')
+export const getProcurements = async () => {
+  const res = await axiosInstance.get('/procurement')
   return res.data
 }
 
-export const getRequisition = async (id: string) => {
-  const res = await axiosInstance.get(`/api/requisitions/${id}`)
+export const getProcurement = async (id: string) => {
+  const res = await axiosInstance.get(`/procurement/${id}`)
   return res.data
 }
 
-export const updateRequisition = async (id: string, data: TProcurement) => {
-  const res = await axiosInstance.put(`/api/requisitions/${id}`, data)
+export const updateProcurement = async (
+  id: string,
+  data: Partial<TProcurement>
+) => {
+  const res = await axiosInstance.put(`/procurement/${id}`, data)
   return res.data
 }
 
-export const deleteRequisition = async (id: string) => {
-  const res = await axiosInstance.delete(`/api/requisitions/${id}`)
+export const deleteProcurement = async (id: string) => {
+  const res = await axiosInstance.delete(`/procurement/${id}`)
   return res.data
 }

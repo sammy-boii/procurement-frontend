@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (res) => res,
   (error) => {
-    console.log(chalk.bgRed(`[ERROR] ${error.response.data?.message}`))
-    return Promise.reject(new Error(error.response.data?.message))
+    console.log(chalk.bgRed(`[ERROR] ${error.response.data.error}`))
+    return Promise.reject(new Error(error.response.data?.error))
   }
 )

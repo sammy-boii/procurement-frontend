@@ -24,6 +24,21 @@ export const ITEM_STATUS = {
   }
 } as const
 
+export const DEPARTMENTS = [
+  'IT',
+  'Finance',
+  'HR',
+  'Admin',
+  'Marketing',
+  'Admissions',
+  'Research',
+  'Student Affairs',
+  'Facilities',
+  'Library',
+  'Procurement',
+  'Others'
+] as const
+
 export const sidebarLinks: ISidebarLinks[] = [
   {
     title: 'Procurements',

@@ -2,7 +2,7 @@
 
 import { Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
-import { deleteRequisition } from '@/api/actions/procurement-actions'
+import { deleteProcurement } from '@/api/actions/procurement-actions'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,7 +20,7 @@ const DeleteProcurement = ({ id }: { id: string }) => {
     <AlertDialog>
       <AlertDialogTrigger>
         <Button
-          onClick={() => deleteRequisition(id)}
+          onClick={() => deleteProcurement(id)}
           variant={'actions'}
           className='text-destructive hover:bg-red-200'
         >

@@ -15,12 +15,18 @@ const DeleteItems = ({
 }) => {
   return (
     <Button
+      disabled={index === 0}
+      paginated
       type='button'
       onClick={() => {
         handleRemoveItem(index)
       }}
       variant={'destructive'}
-      className={cn('w-10 -translate-y-1 h-8', className)}
+      className={cn(
+        'w-10 -translate-y-1 h-8',
+        index === 0 && 'bg-slate-500',
+        className
+      )}
     >
       <MessageCircleX />
     </Button>

@@ -1,22 +1,38 @@
+import { DEPARTMENTS } from '@/constants'
 import { z } from 'zod'
-import {
-  purchaseOrderItemSchema,
-  supplierVendorInformationSchema
-} from './purchaseOrder.schema'
-
 const STATUS = ['PENDING', 'APPROVED', 'REJECTED'] as const
 
-const procurementSchema = z.object({
-  requisitionNo: z.string().min(1, 'Requisition number is required'),
-  requisitionDate: z.date(),
+const supplierVendorInformationSchema = z.object({
+  name: z.string().optional(),
+  address: z.string().optional(),
+  expectedDate: z.string().optional(),
+  phoneNumber: z.string().optional()
+})
+
+export const purchaseOrderItemSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  quantity: z.number().min(1, 'Quantity must be at least 1'),
+  unitPrice: z.number().min(0, 'Unit price must be a positive number'),
+  totalPrice: z.number()
+})
+
+export const procurementSchema = z.object({
+  requisitionNo: z.string().optional(),
+  requisitionDate: z.string().optional(),
   requestor: z.string().min(1, 'Requestor reference is required'),
-  department: z.string().min(1, 'Department is required'),
-  expenseType: z.string().min(1, 'Expense type is required'),
-  purpose: z.string().min(1, 'Purpose is required'),
+  department: z.enum(DEPARTMENTS),
+  expenseType: z.string().trim().min(1, 'Expense type is required'),
+  purpose: z.string().trim().min(1, 'Purpose is required'),
   supplierVendorInformation: supplierVendorInformationSchema.optional(),
   items: z.array(purchaseOrderItemSchema),
   totalNetPrice: z.number(),
   approvedBy: z
+    .object({
+      level1: z.string().optional(),
+      level2: z.string().optional()
+    })
+    .optional(),
+  remarks: z
     .object({
       level1: z.string().optional(),
       level2: z.string().optional()
@@ -30,5 +46,3 @@ const procurementSchema = z.object({
     })
     .optional()
 })
-
-export { procurementSchema }

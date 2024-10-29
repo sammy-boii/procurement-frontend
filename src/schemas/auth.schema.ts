@@ -1,3 +1,4 @@
+import { DEPARTMENTS } from '@/constants'
 import { z } from 'zod'
 
 export const loginSchema = z.object({
@@ -5,16 +6,21 @@ export const loginSchema = z.object({
   password: z.string().min(8, { message: 'Invalid password' })
 })
 
-export const signUpSchema = z
+export const registerSchema = z
   .object({
     email: z.string().email(),
-    password: z.string().min(8, { message: 'Invalid password' }),
+    password: z
+      .string()
+      .min(8, { message: 'Password must be at least 8 characters' }),
     confirmPassword: z.string(),
-    username: z.string().min(1, { message: 'Username is required' }),
-    phoneNumber: z.string().min(10, { message: 'Invalid phone number' }),
-    name: z.string().min(1, { message: 'Full name is required' }),
-    department: z.string().min(1, { message: 'Department is required' }),
-    designation: z.string().min(1, { message: 'Designation is required' })
+    username: z.string().trim().min(1, { message: 'Username is required' }),
+    phoneNumber: z.string().trim().min(10, { message: 'Invalid phone number' }),
+    name: z.string().trim().min(1, { message: 'Full name is required' }),
+    department: z.enum(DEPARTMENTS),
+    designation: z
+      .string()
+      .trim()
+      .min(1, { message: 'Designation is required' })
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
