@@ -38,6 +38,12 @@ export const procurementSchema = z.object({
       level2: z.string().optional()
     })
     .optional(),
+  signature: z
+    .object({
+      level1: z.string().optional(),
+      level2: z.string().optional()
+    })
+    .optional(),
   verificationStatus: z
     .object({
       level1: z.enum(STATUS).default('PENDING'),

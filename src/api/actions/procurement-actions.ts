@@ -3,13 +3,25 @@
 import { TProcurement } from '@/types/procurement.types'
 import { axiosInstance } from '../config'
 
-export const createProcurement = async (data: TProcurement) => {
+type TProcurementRes = {
+  message: string
+  data: TProcurement
+}
+
+export const createProcurement = async (
+  data: TProcurement
+): Promise<TProcurement[]> => {
   const res = await axiosInstance.post('/procurement', data)
   return res.data
 }
 
 export const getProcurements = async () => {
   const res = await axiosInstance.get('/procurement')
+  return res.data
+}
+
+export const getMyProcurements = async () => {
+  const res = await axiosInstance.get('/myprocurement')
   return res.data
 }
 
@@ -26,7 +38,7 @@ export const updateProcurement = async (
   return res.data
 }
 
-export const deleteProcurement = async (id: string) => {
+export const deleteProcurement = async (id: string): Promise<TProcurement> => {
   const res = await axiosInstance.delete(`/procurement/${id}`)
   return res.data
 }

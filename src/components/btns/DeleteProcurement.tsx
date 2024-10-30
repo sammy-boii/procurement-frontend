@@ -38,7 +38,7 @@ const DeleteProcurement = ({ id }: { id: string }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button className='text-destructive-foreground bg-destructive'>
+            <Button className='text-destructive-foreground hover:text-destructive-foreground hover:bg-red-700 bg-destructive'>
               Delete
             </Button>
           </AlertDialogAction>

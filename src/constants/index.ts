@@ -39,6 +39,7 @@ export const DEPARTMENTS = [
   'Others'
 ] as const
 
+export type TDepartment = (typeof DEPARTMENTS)[number] | 'ALL'
 export const sidebarLinks: ISidebarLinks[] = [
   {
     title: 'Procurements',

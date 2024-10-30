@@ -35,9 +35,9 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight, Command } from 'lucide-react'
-import { ITEM_STATUS } from '@/constants'
+import { DEPARTMENTS, ITEM_STATUS, TDepartment } from '@/constants'
 
-type STATUS = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
+type TStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -56,7 +56,8 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [filterValue, setFilterValue] = useState('')
-  const [statusFilter, setStatusFilter] = useState<STATUS>('ALL')
+  const [statusFilter, setStatusFilter] = useState<TStatus>('ALL')
+  const [departmentFilter, setDepartmentFilter] = useState<TDepartment>('ALL')
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -74,10 +75,9 @@ export function DataTable<TData, TValue>({
   }, [])
 
   const [filterField, setFilterField] =
-    useState<keyof TProcurement>('department')
+    useState<keyof TProcurement>('requisitionNo')
 
   const filterableFields: IFilterableField[] = [
-    { value: 'department', name: 'Department' },
     { value: 'requisitionNo', name: 'Requisition No' }
   ]
 
@@ -89,7 +89,14 @@ export function DataTable<TData, TValue>({
     setFilterValue('')
   }
 
-  const handleStatusChange = (status: STATUS) => {
+  const handleDepartmentChange = (department: TDepartment) => {
+    setDepartmentFilter(department)
+    table
+      .getColumn('department')
+      ?.setFilterValue(department === 'ALL' ? '' : department)
+  }
+
+  const handleStatusChange = (status: TStatus) => {
     setStatusFilter(status)
     table
       .getColumn('verificationStatus')
@@ -132,7 +139,7 @@ export function DataTable<TData, TValue>({
             />
           </div>
 
-          <Select value={filterField} onValueChange={handleFilterFieldChange}>
+          <Select onValueChange={handleFilterFieldChange}>
             <SelectTrigger className='w-[180px]'>
               <SelectValue placeholder='Search Filters' />
             </SelectTrigger>
@@ -146,32 +153,50 @@ export function DataTable<TData, TValue>({
           </Select>
         </div>
 
-        <Select
-          value={statusFilter}
-          onValueChange={(val) => handleStatusChange(val as STATUS)}
-        >
-          <SelectTrigger className='w-[180px]'>
-            <SelectValue placeholder='Filter by Status' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem className='bg-gray-100 text-gray-800' value='ALL'>
-              All
-            </SelectItem>
-
-            {Object.values(ITEM_STATUS).map((status) => (
-              <SelectItem
-                key={status.name}
-                value={status.name}
-                style={{
-                  color: status.color
-                }}
-              >
-                {status.name.charAt(0) +
-                  status.name.slice(1).toLocaleLowerCase()}
+        <div className='flex items-center gap-3'>
+          <Select
+            onValueChange={(val) => handleDepartmentChange(val as TDepartment)}
+          >
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Department' />
+            </SelectTrigger>
+            <SelectContent className='h-[250px]'>
+              <SelectItem className='bg-gray-100 text-gray-800' value='ALL'>
+                All
               </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+              {Object.values(DEPARTMENTS).map((department) => (
+                <SelectItem key={department} value={department}>
+                  {department}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={(val) => handleStatusChange(val as TStatus)}>
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Status' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem className='bg-gray-100 text-gray-800' value='ALL'>
+                All
+              </SelectItem>
+
+              {Object.values(ITEM_STATUS).map((status) => (
+                <SelectItem
+                  key={status.name}
+                  value={status.name}
+                  style={{
+                    color: status.color
+                  }}
+                >
+                  {status.name.charAt(0) +
+                    status.name.slice(1).toLocaleLowerCase()}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className='rounded-md border'>

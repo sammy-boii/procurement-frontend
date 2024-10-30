@@ -2,7 +2,7 @@
 
 import { Plus } from 'lucide-react'
 import { Button } from '../ui/button'
-import { newItem } from '@/app/(main)/create-procurement/page'
+import { newItem } from '../forms/ProcurementForm'
 
 const AddItems = ({ handleAddItem }: { handleAddItem: any }) => {
   return (

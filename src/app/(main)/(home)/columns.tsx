@@ -38,6 +38,10 @@ export const columns: ColumnDef<TProcurement>[] = [
   {
     accessorKey: 'department',
     header: 'Department',
+    filterFn: (row, _columnId, filterValue) => {
+      const department = row.original.department
+      return filterValue === 'ALL' || department === filterValue
+    },
     cell: ({ row }) => <div>{row.original.department}</div>
   },
   {
@@ -75,9 +79,9 @@ export const columns: ColumnDef<TProcurement>[] = [
     cell: ({ row }) => {
       return (
         <div className='flex items-center justify-center gap-1'>
-          <UpdateProcurement id={''} />
-          <DeleteProcurement id={''} />
-          <ViewProcurement id={''} />
+          <UpdateProcurement id={row.original._id} />
+          <DeleteProcurement id={row.original._id}  />
+          <ViewProcurement id={row.original._id}  />
         </div>
       )
     }

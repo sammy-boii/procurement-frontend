@@ -3,15 +3,42 @@ import logo from '/public/assets/herald-logo.png'
 import { Truck } from 'lucide-react'
 import Image from 'next/image'
 import { Children } from 'react'
-import { dummyData } from '@/lib/dummyData'
 import { cn } from '@/lib/utils'
+import { getProcurement } from '@/api/actions/procurement-actions'
+import { TProcurement } from '@/types/procurement.types'
+import { getProfile, getUserById } from '@/api/actions/user-actions'
+import { TUser } from '@/types/user.types'
+import VerificationRow from '@/components/elements/VerificationRow'
 
-export default function ViewProcurementPage({
+interface IRes {
+  data: TUser
+  message: string
+}
+
+export default async function ViewProcurementPage({
   params: { id }
 }: {
   params: { id: string }
 }) {
-  const data = dummyData[0]
+  const [userRes, procurementRes] = await Promise.all([
+    getProfile(),
+    getProcurement(id)
+  ])
+
+  const profile: TUser = userRes.data
+  const data: TProcurement = procurementRes.data
+
+  const approversArr = [
+    data.approvedBy?.level1,
+    data.approvedBy?.level2
+  ].filter((x) => x) as string[]
+
+  // ts cannot auto infer filter()
+
+  const [requestor, ...approvers]: [IRes, ...IRes[]] = await Promise.all([
+    getUserById(data.requestor),
+    ...approversArr.map((x) => getUserById(x))
+  ])
 
   return (
     <main className='mb-24'>
@@ -30,7 +57,9 @@ export default function ViewProcurementPage({
       <section className='mt-12 text-sm font-light'>
         <div className='space-x-4'>
           <span className='text-primary font-semibold'>Requisition Date: </span>
-          <span>{new Date(data.requisitionDate).toLocaleDateString()}</span>
+          <span>
+            {new Date(data.requisitionDate || '').toLocaleDateString()}
+          </span>
         </div>
         <div className='space-x-[30px]'>
           <span className='font-semibold text-primary'>Requisition No: </span>
@@ -50,7 +79,7 @@ export default function ViewProcurementPage({
           <Row>
             <div className='space-x-2'>
               <span>Name:</span>
-              <span>{data.requestor}</span>
+              <span>{requestor.data.name || 'N/A'}</span>
             </div>
             <div className='space-x-2'>
               <span>Name:</span>
@@ -141,40 +170,12 @@ export default function ViewProcurementPage({
         </Row>
       </table>
 
-      <table className='w-full font-light text-sm'>
-        <Row>
-          <div className='flex flex-col'>
-            <span>Requested By</span>
-            <div className='w-[70%] space-y-1'>
-              <div className='border-b h-16 border-black border-dotted'></div>
-              <div>{data.requestor || 'No Name'}</div>
-              <div>{data.department || 'No department specified'}</div>
-            </div>
-          </div>
-
-          <div className='flex flex-col'>
-            <span>Verified By</span>
-            <div className='w-[70%] space-y-1'>
-              <div className='border-b h-16 border-black border-dotted'></div>
-              <div>{data.requestor || 'No Name'}</div>
-              <div>{data.department || 'No department specified'}</div>
-            </div>
-          </div>
-          <div className='flex flex-col'>
-            <span>Approved By</span>
-            <div className='w-[70%] space-y-1'>
-              <div className='border-b h-16 border-black border-dotted'></div>
-              <div>{data.requestor || 'No Name'}</div>
-              <div>{data.department || 'No department specified'}</div>
-            </div>
-          </div>
-        </Row>
-      </table>
+      <VerificationRow data={data} profile={profile} approvers={approvers} />
     </main>
   )
 }
 
-function Row({
+export function Row({
   children,
   heading = false,
   divider = false,
@@ -214,7 +215,7 @@ function Row({
         <td
           colSpan={fullWidth ? 5 : 1}
           className={cn(
-            'px-5 py-3 border border-gray-300',
+            'px-5 max-w-[300px] whitespace-normal break-words py-3 border border-gray-300',
             fullWidth && 'w-full'
           )}
           key={index}
