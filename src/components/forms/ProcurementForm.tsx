@@ -53,6 +53,7 @@ interface IEditProps {
   edit: true
   id: string
   data: TProcurement
+  requestorName: string
 }
 interface ICreateProps {
   edit?: false
@@ -66,7 +67,8 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
     : {
         requestor: props.requestor,
         requisitionDate: new Date().toISOString(),
-        totalNetPrice: 0
+        totalNetPrice: 0,
+        items: [newItem]
       }
 
   const router = useRouter()
@@ -85,12 +87,6 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
     name: 'items'
   })
 
-  useEffect(() => {
-    if (itemsFields.length === 0) {
-      appendItem(newItem)
-    }
-  }, [itemsFields, appendItem])
-
   async function onSubmit(data: TProcurement) {
     const totalNetPrice = data.items.reduce(
       (sum, item) => sum + item.totalPrice,
@@ -102,6 +98,8 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
     try {
       if (props.edit) {
         await updateProcurement(props.id, finalData)
+        toast.success('Procurement updated successfully')
+        router.replace('/')
       } else {
         await createProcurement(finalData)
         toast.success('Procurement created successfully')
@@ -155,7 +153,7 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
                 <FormLabel>Requested By</FormLabel>
                 <FormControl>
                   <div className='bg-[#F2F2F5] hover:cursor-not-allowed text-gray-500 text-sm flex gap-2 py-2 px-4 rounded'>
-                    {!props.edit ? props.requestorName : 'N/A'}
+                    {props.requestorName || 'N/A'}
                     <User className='ml-auto h-4 w-4 opacity-50' />
                   </div>
                 </FormControl>
@@ -163,6 +161,7 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name='department'
@@ -170,7 +169,10 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
               <FormItem>
                 <FormLabel>Department</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange}>
+                  <Select
+                    defaultValue={props.edit ? props.data.department : ''}
+                    onValueChange={field.onChange}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder='Select Department' />
                     </SelectTrigger>
@@ -230,12 +232,12 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
         </section>
         <RequiredFormTitle title='Procurement Request' />
         <section className='w-full space-y-10'>
-          {itemsFields.map((_, index) => (
+          {itemsFields.map((field, index) => (
             <ItemsRow
+              key={field.id}
               form={form}
               index={index}
               handleRemoveItem={removeItem}
-              key={index}
             />
           ))}
           <AddItems handleAddItem={appendItem} />

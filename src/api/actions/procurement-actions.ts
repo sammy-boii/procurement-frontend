@@ -3,11 +3,6 @@
 import { TProcurement } from '@/types/procurement.types'
 import { axiosInstance } from '../config'
 
-type TProcurementRes = {
-  message: string
-  data: TProcurement
-}
-
 export const createProcurement = async (
   data: TProcurement
 ): Promise<TProcurement[]> => {
@@ -40,5 +35,31 @@ export const updateProcurement = async (
 
 export const deleteProcurement = async (id: string): Promise<TProcurement> => {
   const res = await axiosInstance.delete(`/procurement/${id}`)
+  return res.data
+}
+
+export const verifyLevel1 = async (
+  id: string,
+  data: { signature?: string; remarks?: string }
+) => {
+  const res = await axiosInstance.post(`/verify/level1/${id}`, data)
+  return res.data
+}
+
+export const verifyLevel2 = async (
+  id: string,
+  data: { signature?: string; remarks?: string }
+) => {
+  const res = await axiosInstance.post(`/verify/level2/${id}`, data)
+  return res.data
+}
+
+export const rejectLevel1 = async (id: string, data: { remarks?: string }) => {
+  const res = await axiosInstance.post(`/reject/level1/${id}`, data)
+  return res.data
+}
+
+export const rejectLevel2 = async (id: string, data: { remarks?: string }) => {
+  const res = await axiosInstance.post(`/reject/level2/${id}`, data)
   return res.data
 }

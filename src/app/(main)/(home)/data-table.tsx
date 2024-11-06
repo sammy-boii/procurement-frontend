@@ -40,6 +40,13 @@ import { DEPARTMENTS, ITEM_STATUS, TDepartment } from '@/constants'
 type TStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
 
 interface DataTableProps<TData, TValue> {
+  res: {
+    procurements: TProcurement[]
+    currentPage: 1
+    totalPages: 1
+    totalProcurements: 1
+    limit: 10
+  }
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
@@ -51,13 +58,12 @@ interface IFilterableField {
 
 export function DataTable<TData, TValue>({
   columns,
-  data
+  data,
+  res
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [filterValue, setFilterValue] = useState('')
-  const [statusFilter, setStatusFilter] = useState<TStatus>('ALL')
-  const [departmentFilter, setDepartmentFilter] = useState<TDepartment>('ALL')
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -90,33 +96,44 @@ export function DataTable<TData, TValue>({
   }
 
   const handleDepartmentChange = (department: TDepartment) => {
-    setDepartmentFilter(department)
     table
       .getColumn('department')
       ?.setFilterValue(department === 'ALL' ? '' : department)
   }
 
   const handleStatusChange = (status: TStatus) => {
-    setStatusFilter(status)
     table
       .getColumn('verificationStatus')
       ?.setFilterValue(status === 'ALL' ? '' : status)
   }
 
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10
+  })
+
   const table = useReactTable({
     data,
+
     columns,
+    // manualPagination: true,
     getPaginationRowModel: getPaginationRowModel(),
+    rowCount: res.totalProcurements,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onPaginationChange: setPagination,
+
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      pagination
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel()
   })
+
+  console.log(res.totalProcurements)
 
   return (
     <div>

@@ -4,6 +4,7 @@ import {
   createProcurement,
   deleteProcurement,
   getMyProcurements,
+  getProcurement,
   getProcurements,
   updateProcurement
 } from '@/api/actions/procurement-actions'
@@ -12,14 +13,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 export const useGetProcurements = () => {
-  useQuery({
+  useQuery<TProcurement[]>({
     queryKey: ['procurement'],
     queryFn: () => getProcurements()
   })
 }
 
+export const useGetProcurementById = (id: string) => {
+  useQuery<TProcurement>({
+    queryKey: ['procurement', id],
+    queryFn: () => getProcurement(id)
+  })
+}
+
 export const useGetMyProcurements = () => {
-  useQuery({
+  useQuery<TProcurement[]>({
     queryKey: ['procurement'],
     queryFn: () => getMyProcurements()
   })
@@ -31,7 +39,11 @@ export const useCreateProcurement = () => {
     mutationFn: (newProcurement: TProcurement) =>
       createProcurement(newProcurement),
     onSuccess: () => {
+      toast.success('Successfully created procurement')
       queryClient.invalidateQueries({ queryKey: ['procurement'] })
+    },
+    onError: (err) => {
+      toast.error(err.message)
     }
   })
 }

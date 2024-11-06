@@ -9,6 +9,8 @@ import DeleteProcurement from '@/components/btns/DeleteProcurement'
 import ViewProcurement from '@/components/btns/ViewProcurement'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { getProfile } from '@/api/actions/user-actions'
+import { useGetProfile } from '@/hooks/use-user'
 
 export const columns: ColumnDef<TProcurement>[] = [
   {
@@ -80,8 +82,8 @@ export const columns: ColumnDef<TProcurement>[] = [
       return (
         <div className='flex items-center justify-center gap-1'>
           <UpdateProcurement id={row.original._id} />
-          <DeleteProcurement id={row.original._id}  />
-          <ViewProcurement id={row.original._id}  />
+          <DeleteProcurement id={row.original._id} />
+          <ViewProcurement id={row.original._id} />
         </div>
       )
     }

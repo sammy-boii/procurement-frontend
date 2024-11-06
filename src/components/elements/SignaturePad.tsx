@@ -80,8 +80,24 @@ const SignaturePad = ({
   const saveSignature = () => {
     const canvas = canvasRef.current
     if (canvas) {
+      const context = canvas.getContext('2d')
+      const pixelData = context?.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      ).data
+      const isEmpty =
+        pixelData && Array.from(pixelData).every((value) => value === 0)
+
+      console.log(isEmpty)
+
+      // if (isEmpty) {
+      //   setSignature(undefined)
+      // } else {
       const dataUrl = canvas.toDataURL('image/png')
       setSignature(dataUrl)
+      // }
     }
     setIsEditing(false)
   }

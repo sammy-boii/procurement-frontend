@@ -32,10 +32,18 @@ export const procurementSchema = z.object({
       level2: z.string().optional()
     })
     .optional(),
-  remarks: z
+  rejectedBy: z
     .object({
       level1: z.string().optional(),
       level2: z.string().optional()
+    })
+    .optional(),
+  remarks: z
+    .object({
+      level1: z.string().optional(),
+      level2: z.string().optional(),
+      rejectedLevel1: z.string().optional(),
+      rejectedLevel2: z.string().optional()
     })
     .optional(),
   signature: z

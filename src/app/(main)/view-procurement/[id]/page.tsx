@@ -3,12 +3,13 @@ import logo from '/public/assets/herald-logo.png'
 import { Truck } from 'lucide-react'
 import Image from 'next/image'
 import { Children } from 'react'
-import { cn } from '@/lib/utils'
+import { cn, formatCurrency } from '@/lib/utils'
 import { getProcurement } from '@/api/actions/procurement-actions'
 import { TProcurement } from '@/types/procurement.types'
 import { getProfile, getUserById } from '@/api/actions/user-actions'
 import { TUser } from '@/types/user.types'
 import VerificationRow from '@/components/elements/VerificationRow'
+import { ITEM_STATUS } from '@/constants'
 
 interface IRes {
   data: TUser
@@ -41,7 +42,7 @@ export default async function ViewProcurementPage({
   ])
 
   return (
-    <main className='mb-24'>
+    <main className='mb-10'>
       <header>
         <PageHeading
           title='Procurement'
@@ -54,16 +55,75 @@ export default async function ViewProcurementPage({
         </div>
       </header>
 
-      <section className='mt-12 text-sm font-light'>
-        <div className='space-x-4'>
-          <span className='text-primary font-semibold'>Requisition Date: </span>
-          <span>
-            {new Date(data.requisitionDate || '').toLocaleDateString()}
-          </span>
+      <div className='flex mt-3 items-center justify-between'>
+        <section className='mt-12 text-sm font-light'>
+          <div className='space-x-4'>
+            <span className='text-primary font-semibold'>
+              Requisition Date:{' '}
+            </span>
+            <span>
+              {new Date(data.requisitionDate || '').toLocaleDateString()}
+            </span>
+          </div>
+          <div className='space-x-[30px]'>
+            <span className='font-semibold text-primary'>Requisition No: </span>
+            <span>{data.requisitionNo}</span>
+          </div>
+        </section>
+      </div>
+
+      <section className='text-sm flex mt-12 items-baseline justify-between'>
+        <div className='space-y-2'>
+          <div className='flex items-center gap-2'>
+            <span className='text-primary font-semibold'>Level 1:</span>
+            <div
+              className='px-2 py-1 rounded-md'
+              style={{
+                background:
+                  ITEM_STATUS[data.verificationStatus?.level1 || 'PENDING']
+                    .bgColor,
+                color:
+                  ITEM_STATUS[data.verificationStatus?.level1 || 'PENDING']
+                    .color
+              }}
+            >
+              {data.verificationStatus?.level1}
+            </div>
+          </div>
+
+          <div className='flex items-center gap-2'>
+            <span className='text-primary font-semibold'>Level 2:</span>
+            <div
+              className='px-2 py-1 rounded-md'
+              style={{
+                background:
+                  ITEM_STATUS[data.verificationStatus?.level2 || 'PENDING']
+                    .bgColor,
+                color:
+                  ITEM_STATUS[data.verificationStatus?.level2 || 'PENDING']
+                    .color
+              }}
+            >
+              {data.verificationStatus?.level2}
+            </div>
+          </div>
         </div>
-        <div className='space-x-[30px]'>
-          <span className='font-semibold text-primary'>Requisition No: </span>
-          <span>{data.requisitionNo}</span>
+
+        <div className='flex items-center gap-2'>
+          <span className='text-primary font-semibold'>Final Status:</span>
+          <div
+            className='px-2 py-1 rounded-md'
+            style={{
+              background:
+                ITEM_STATUS[data.verificationStatus?.finalStatus || 'PENDING']
+                  .bgColor,
+              color:
+                ITEM_STATUS[data.verificationStatus?.finalStatus || 'PENDING']
+                  .color
+            }}
+          >
+            {data.verificationStatus?.finalStatus}
+          </div>
         </div>
       </section>
 
@@ -151,17 +211,17 @@ export default async function ViewProcurementPage({
         <tbody>
           {data.items.map((item, index) => (
             <Row key={item.name}>
-              <span>{index}</span>
+              <span>{index + 1}</span>
               <span>{item.name}</span>
               <span>{item.quantity}</span>
-              <span>Rs. {item.unitPrice}</span>
-              <span>Rs. {item.totalPrice}</span>
+              <span>Rs. {formatCurrency(item.unitPrice)}</span>
+              <span>Rs. {formatCurrency(item.totalPrice)}</span>
             </Row>
           ))}
           <Row fullWidth>
             <div className='space-x-2'>
               <span>Total Amout Excluding VAT:</span>
-              <span>{data.totalNetPrice}</span>
+              <span>{formatCurrency(data.totalNetPrice)}</span>
             </div>
           </Row>
         </tbody>
@@ -170,7 +230,12 @@ export default async function ViewProcurementPage({
         </Row>
       </table>
 
-      <VerificationRow data={data} profile={profile} approvers={approvers} />
+      <VerificationRow
+        id={id}
+        data={data}
+        profile={profile}
+        approvers={approvers}
+      />
     </main>
   )
 }

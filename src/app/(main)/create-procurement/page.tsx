@@ -1,17 +1,19 @@
-import { getProfile } from '@/api/actions/user-actions'
+'use client'
+
 import BackButton from '@/components/btns/BackButton'
 import RequiredFormTitle from '@/components/elements/RequiredFormTitle'
 import { CreateProcurement } from '@/components/forms/ProcurementForm'
+import { useGetProfile } from '@/hooks/use-user'
 
-const CreateProcurementPage = async () => {
-  const userRes = await getProfile()
+const CreateProcurementPage = () => {
+  const { data: profile } = useGetProfile()
 
   return (
     <main className='mt-12'>
       <BackButton />
       <RequiredFormTitle title='Requisition Information' />
       <CreateProcurement
-        requestorName={userRes.data.name}
+        requestorName={userRes.data}
         requestor={userRes.data._id}
       />
     </main>

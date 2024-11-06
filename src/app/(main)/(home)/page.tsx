@@ -23,7 +23,11 @@ export default async function HomePage() {
       </header>
 
       <div className='container mx-auto py-10'>
-        <DataTable columns={columns} data={procurementRes.data} />
+        <DataTable
+          columns={columns}
+          res={procurementRes.data}
+          data={procurementRes.data.procurements}
+        />
       </div>
     </main>
   )
