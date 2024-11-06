@@ -1,46 +1,52 @@
+'use client'
+
 import PageHeading from '@/components/elements/PageHeading'
 import logo from '/public/assets/herald-logo.png'
 import { Truck } from 'lucide-react'
 import Image from 'next/image'
 import { Children } from 'react'
 import { cn, formatCurrency } from '@/lib/utils'
-import { getProcurement } from '@/api/actions/procurement-actions'
-import { TProcurement } from '@/types/procurement.types'
-import { getProfile, getUserById } from '@/api/actions/user-actions'
 import { TUser } from '@/types/user.types'
 import VerificationRow from '@/components/elements/VerificationRow'
 import { ITEM_STATUS } from '@/constants'
+import { useGetProfile, useGetUserById } from '@/hooks/use-user'
+import { useGetProcurementById } from '@/hooks/use-procurement'
+import GiantSpinner from '@/components/elements/GiantSpinner'
 
 interface IRes {
   data: TUser
   message: string
 }
 
-export default async function ViewProcurementPage({
+export default function ViewProcurementPage({
   params: { id }
 }: {
   params: { id: string }
 }) {
-  const [userRes, procurementRes] = await Promise.all([
-    getProfile(),
-    getProcurement(id)
-  ])
-
-  const profile: TUser = userRes.data
-  const data: TProcurement = procurementRes.data
-
-  const approversArr = [
-    data.approvedBy?.level1,
-    data.approvedBy?.level2
-  ].filter((x) => x) as string[]
+  const { data: profile, isPending: isProfilePending } = useGetProfile()
+  const { data, isPending: isProcurementPending } = useGetProcurementById(id)
 
   // ts cannot auto infer filter()
 
-  const [requestor, ...approvers]: [IRes, ...IRes[]] = await Promise.all([
-    getUserById(data.requestor),
-    ...approversArr.map((x) => getUserById(x))
-  ])
+  const { data: requestor, isPending: isRequestorPending } = useGetUserById(
+    data?.data.requestor || ''
+  )
+  const { data: approver1, isPending: isApprover1Pending } = useGetUserById(
+    data?.data.approvedBy?.level1 || ''
+  )
+  const { data: approver2, isPending: isApprover2Pending } = useGetUserById(
+    data?.data.approvedBy?.level1 || ''
+  )
 
+  if (
+    isProfilePending ||
+    isRequestorPending ||
+    isApprover1Pending ||
+    isApprover2Pending
+  )
+    return <GiantSpinner />
+
+  const approvers = [approver1, approver2]
   return (
     <main className='mb-10'>
       <header>
@@ -62,12 +68,12 @@ export default async function ViewProcurementPage({
               Requisition Date:{' '}
             </span>
             <span>
-              {new Date(data.requisitionDate || '').toLocaleDateString()}
+              {new Date(data?.data.requisitionDate || '').toLocaleDateString()}
             </span>
           </div>
           <div className='space-x-[30px]'>
             <span className='font-semibold text-primary'>Requisition No: </span>
-            <span>{data.requisitionNo}</span>
+            <span>{data?.data.requisitionNo || 'N/A'}</span>
           </div>
         </section>
       </div>
@@ -80,14 +86,16 @@ export default async function ViewProcurementPage({
               className='px-2 py-1 rounded-md'
               style={{
                 background:
-                  ITEM_STATUS[data.verificationStatus?.level1 || 'PENDING']
-                    .bgColor,
+                  ITEM_STATUS[
+                    data?.data.verificationStatus?.level1 || 'PENDING'
+                  ].bgColor,
                 color:
-                  ITEM_STATUS[data.verificationStatus?.level1 || 'PENDING']
-                    .color
+                  ITEM_STATUS[
+                    data?.data.verificationStatus?.level1 || 'PENDING'
+                  ].color
               }}
             >
-              {data.verificationStatus?.level1}
+              {data?.data.verificationStatus?.level1}
             </div>
           </div>
 
@@ -97,14 +105,16 @@ export default async function ViewProcurementPage({
               className='px-2 py-1 rounded-md'
               style={{
                 background:
-                  ITEM_STATUS[data.verificationStatus?.level2 || 'PENDING']
-                    .bgColor,
+                  ITEM_STATUS[
+                    data?.data.verificationStatus?.level2 || 'PENDING'
+                  ].bgColor,
                 color:
-                  ITEM_STATUS[data.verificationStatus?.level2 || 'PENDING']
-                    .color
+                  ITEM_STATUS[
+                    data?.data.verificationStatus?.level2 || 'PENDING'
+                  ].color
               }}
             >
-              {data.verificationStatus?.level2}
+              {data?.data.verificationStatus?.level2}
             </div>
           </div>
         </div>
@@ -115,14 +125,16 @@ export default async function ViewProcurementPage({
             className='px-2 py-1 rounded-md'
             style={{
               background:
-                ITEM_STATUS[data.verificationStatus?.finalStatus || 'PENDING']
-                  .bgColor,
+                ITEM_STATUS[
+                  data?.data.verificationStatus?.finalStatus || 'PENDING'
+                ].bgColor,
               color:
-                ITEM_STATUS[data.verificationStatus?.finalStatus || 'PENDING']
-                  .color
+                ITEM_STATUS[
+                  data?.data.verificationStatus?.finalStatus || 'PENDING'
+                ].color
             }}
           >
-            {data.verificationStatus?.finalStatus}
+            {data?.data.verificationStatus?.finalStatus}
           </div>
         </div>
       </section>
@@ -139,32 +151,34 @@ export default async function ViewProcurementPage({
           <Row>
             <div className='space-x-2'>
               <span>Name:</span>
-              <span>{requestor.data.name || 'N/A'}</span>
+              <span>{requestor?.data.name || 'N/A'}</span>
             </div>
             <div className='space-x-2'>
               <span>Name:</span>
-              <span>{data.supplierVendorInformation?.name || 'N/A'}</span>
+              <span>{data?.data.supplierVendorInformation?.name || 'N/A'}</span>
             </div>
           </Row>
           <Row>
             <div className='space-x-2'>
               <span>Department:</span>
-              <span>{data.department}</span>
+              <span>{data?.data.department}</span>
             </div>
             <div className='space-x-2'>
               <span>Address:</span>
-              <span>{data.supplierVendorInformation?.address || 'N/A'}</span>
+              <span>
+                {data?.data.supplierVendorInformation?.address || 'N/A'}
+              </span>
             </div>
           </Row>
           <Row>
             <div className='space-x-2'>
               <span>Expense Type:</span>
-              <span>{data.expenseType}</span>
+              <span>{data?.data.expenseType}</span>
             </div>
             <div className='space-x-2'>
               <span>Phone Number:</span>
               <span>
-                {data.supplierVendorInformation?.phoneNumber || 'N/A'}
+                {data?.data.supplierVendorInformation?.phoneNumber || 'N/A'}
               </span>
             </div>
           </Row>
@@ -172,9 +186,9 @@ export default async function ViewProcurementPage({
             <div className='space-x-2'>
               <span>Expected Delivery Date:</span>
               <span>
-                {(data.supplierVendorInformation?.expectedDate &&
+                {(data?.data.supplierVendorInformation?.expectedDate &&
                   new Date(
-                    data.supplierVendorInformation.expectedDate
+                    data?.data.supplierVendorInformation.expectedDate
                   ).toDateString()) ||
                   'N/A'}
               </span>
@@ -183,7 +197,7 @@ export default async function ViewProcurementPage({
           <Row fullWidth>
             <div className='space-x-2'>
               <span>Reason for the purchase:</span>
-              <span>{data.purpose || 'N/A'}</span>
+              <span>{data?.data.purpose || 'N/A'}</span>
             </div>
           </Row>
           <Row divider fullWidth>
@@ -209,7 +223,7 @@ export default async function ViewProcurementPage({
         </thead>
 
         <tbody>
-          {data.items.map((item, index) => (
+          {data?.data.items.map((item, index) => (
             <Row key={item.name}>
               <span>{index + 1}</span>
               <span>{item.name}</span>
@@ -221,7 +235,7 @@ export default async function ViewProcurementPage({
           <Row fullWidth>
             <div className='space-x-2'>
               <span>Total Amout Excluding VAT:</span>
-              <span>{formatCurrency(data.totalNetPrice)}</span>
+              <span>{formatCurrency(data?.data.totalNetPrice || 0)}</span>
             </div>
           </Row>
         </tbody>
@@ -232,9 +246,9 @@ export default async function ViewProcurementPage({
 
       <VerificationRow
         id={id}
-        data={data}
-        profile={profile}
-        approvers={approvers}
+        data={data!.data}
+        profile={profile!.data}
+        approvers={approvers as IRes[]}
       />
     </main>
   )

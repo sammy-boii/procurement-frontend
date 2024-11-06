@@ -1,27 +1,32 @@
-import { getProcurement } from '@/api/actions/procurement-actions'
-import { getUserById } from '@/api/actions/user-actions'
+'use client'
+
+import GiantSpinner from '@/components/elements/GiantSpinner'
 import { CreateProcurement } from '@/components/forms/ProcurementForm'
-import { TProcurement } from '@/types/procurement.types'
-import { TUser } from '@/types/user.types'
+import { useGetProcurementById } from '@/hooks/use-procurement'
+import { useGetUserById } from '@/hooks/use-user'
 import React from 'react'
 
-const EditProcurementPage = async ({
+const EditProcurementPage = ({
   params: { id }
 }: {
   params: { id: string }
 }) => {
-  const procurementRes = await getProcurement(id)
-  const procurement: TProcurement = procurementRes.data
+  const { data: procurement, isPending: isProcurementPending } =
+    useGetProcurementById(id)
 
-  const requestorRes = await getUserById(procurement.requestor)
-  const requestor: TUser = requestorRes.data
+  const { data: requestor, isPending: isRequestorPending } = useGetUserById(
+    procurement?.data._id || ''
+  )
 
+  if (isProcurementPending || isRequestorPending) return <GiantSpinner />
+
+  console.log(procurement)
   return (
     <CreateProcurement
       edit
       id={id}
-      data={procurement}
-      requestorName={requestor.name}
+      data={procurement!.data}
+      requestorName={requestor?.data.name || ''}
     />
   )
 }

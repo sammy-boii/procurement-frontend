@@ -1,12 +1,20 @@
+'use client'
+
 import AddProcurement from '@/components/btns/AddProcurement'
 import PageHeading from '@/components/elements/PageHeading'
 import { Truck } from 'lucide-react'
 import { DataTable } from './data-table'
 import { columns } from './columns'
-import { getProcurements } from '@/api/actions/procurement-actions'
+import { useGetProcurements } from '@/hooks/use-procurement'
+import GiantSpinner from '@/components/elements/GiantSpinner'
+import { TProcurement } from '@/types/procurement.types'
 
-export default async function HomePage() {
-  const procurementRes = await getProcurements()
+export default function HomePage() {
+  const { data, isPending } = useGetProcurements()
+
+  if (isPending) return <GiantSpinner />
+
+  console.log(data)
 
   return (
     <main>
@@ -25,8 +33,8 @@ export default async function HomePage() {
       <div className='container mx-auto py-10'>
         <DataTable
           columns={columns}
-          res={procurementRes.data}
-          data={procurementRes.data.procurements}
+          res={data!.data}
+          data={data!.data.procurements}
         />
       </div>
     </main>

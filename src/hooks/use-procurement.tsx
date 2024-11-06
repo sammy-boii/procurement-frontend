@@ -12,22 +12,35 @@ import { TProcurement } from '@/types/procurement.types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
+interface IRes<T> {
+  message: string
+  data: T
+}
+
+export interface IPaginatedProcurement {
+  procurements: TProcurement[]
+  limit: number
+  currentPage: number
+  totalPages: number
+  totalProcurements: number
+}
+
 export const useGetProcurements = () => {
-  useQuery<TProcurement[]>({
+  return useQuery<IRes<IPaginatedProcurement>>({
     queryKey: ['procurement'],
     queryFn: () => getProcurements()
   })
 }
 
 export const useGetProcurementById = (id: string) => {
-  useQuery<TProcurement>({
+  return useQuery<IRes<TProcurement>>({
     queryKey: ['procurement', id],
     queryFn: () => getProcurement(id)
   })
 }
 
 export const useGetMyProcurements = () => {
-  useQuery<TProcurement[]>({
+  return useQuery<IRes<IPaginatedProcurement>>({
     queryKey: ['procurement'],
     queryFn: () => getMyProcurements()
   })

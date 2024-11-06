@@ -36,17 +36,12 @@ import {
 } from '@/components/ui/select'
 import { ChevronLeft, ChevronRight, Command } from 'lucide-react'
 import { DEPARTMENTS, ITEM_STATUS, TDepartment } from '@/constants'
+import { IPaginatedProcurement } from '@/hooks/use-procurement'
 
 type TStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'ALL'
 
 interface DataTableProps<TData, TValue> {
-  res: {
-    procurements: TProcurement[]
-    currentPage: 1
-    totalPages: 1
-    totalProcurements: 1
-    limit: 10
-  }
+  res: IPaginatedProcurement
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
