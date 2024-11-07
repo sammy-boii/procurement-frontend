@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import SignaturePad from './SignaturePad'
 import { TUser } from '@/types/user.types'
 import { TProcurement } from '@/types/procurement.types'
-import { Row } from '@/app/(main)/view-procurement/[id]/page'
 import { Button } from '../ui/button'
 import { Check, X } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -31,6 +30,7 @@ import {
   useVerifyLevel2
 } from '@/hooks/use-procurement'
 import { cn } from '@/lib/utils'
+import { Row } from './ViewRow'
 
 interface IRes {
   data: TUser

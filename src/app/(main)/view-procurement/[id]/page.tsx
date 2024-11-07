@@ -12,11 +12,7 @@ import { ITEM_STATUS } from '@/constants'
 import { useGetProfile, useGetUserById } from '@/hooks/use-user'
 import { useGetProcurementById } from '@/hooks/use-procurement'
 import GiantSpinner from '@/components/elements/GiantSpinner'
-
-interface IRes {
-  data: TUser
-  message: string
-}
+import { Row } from '@/components/elements/ViewRow'
 
 export default function ViewProcurementPage({
   params: { id }
@@ -256,57 +252,5 @@ export default function ViewProcurementPage({
         approvers={approvers}
       />
     </main>
-  )
-}
-
-export function Row({
-  children,
-  heading = false,
-  divider = false,
-  fullWidth = false
-}: {
-  children: React.ReactNode
-  divider?: boolean
-  heading?: boolean
-  fullWidth?: boolean
-}) {
-  return heading ? (
-    <tr>
-      {Children.map(children, (child) => (
-        <th
-          colSpan={fullWidth ? 5 : 1}
-          className='font-medium text-left px-5 py-3 border border-gray-300'
-        >
-          {child}
-        </th>
-      ))}
-    </tr>
-  ) : divider ? (
-    <tr>
-      <td
-        colSpan={fullWidth ? 5 : 1}
-        className={cn(
-          'px-5 py-3 border border-gray-300 border-b-0',
-          fullWidth && 'w-full'
-        )}
-      >
-        {children}
-      </td>
-    </tr>
-  ) : (
-    <tr>
-      {Children.map(children, (child, index) => (
-        <td
-          colSpan={fullWidth ? 5 : 1}
-          className={cn(
-            'px-5 max-w-[300px] whitespace-normal break-words py-3 border border-gray-300',
-            fullWidth && 'w-full'
-          )}
-          key={index}
-        >
-          {child}
-        </td>
-      ))}
-    </tr>
   )
 }
