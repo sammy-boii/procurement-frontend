@@ -74,18 +74,18 @@ export const columns: ColumnDef<TProcurement>[] = [
         </div>
       )
     }
-  },
-  {
-    header: () => <div className='text-center'>Actions</div>,
-    id: 'actions',
-    cell: ({ row }) => {
-      return (
-        <div className='flex items-center justify-center gap-1'>
-          <UpdateProcurement id={row.original._id} />
-          <DeleteProcurement id={row.original._id} />
-          <ViewProcurement id={row.original._id} />
-        </div>
-      )
-    }
   }
+  // {
+  //   header: () => <div className='text-center'>Actions</div>,
+  //   id: 'actions',
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className='flex items-center justify-center gap-1'>
+  //         <UpdateProcurement id={row.original._id} />
+  //         <DeleteProcurement id={row.original._id} />
+  //         <ViewProcurement id={row.original._id} />
+  //       </div>
+  //     )
+  //   }
+  // }
 ]

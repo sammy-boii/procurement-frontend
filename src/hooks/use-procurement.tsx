@@ -6,7 +6,11 @@ import {
   getMyProcurements,
   getProcurement,
   getProcurements,
-  updateProcurement
+  rejectLevel1,
+  rejectLevel2,
+  updateProcurement,
+  verifyLevel1,
+  verifyLevel2
 } from '@/api/actions/procurement-actions'
 import { TProcurement } from '@/types/procurement.types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -52,8 +56,8 @@ export const useCreateProcurement = () => {
     mutationFn: (newProcurement: TProcurement) =>
       createProcurement(newProcurement),
     onSuccess: () => {
-      toast.success('Successfully created procurement')
       queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Successfully created procurement')
     },
     onError: (err) => {
       toast.error(err.message)
@@ -73,8 +77,8 @@ export const useUpdateProcurement = () => {
       newProcurement: Partial<TProcurement>
     }) => updateProcurement(id, newProcurement),
     onSuccess: () => {
-      toast.success('Procurement updated sucessfully')
       queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Procurement updated sucessfully')
     },
     onError: (err) => {
       toast.error(err.message)
@@ -88,8 +92,81 @@ export const useDeleteProcurement = () => {
   return useMutation({
     mutationFn: (id: string) => deleteProcurement(id),
     onSuccess: () => {
-      toast.success('Procurement deleted successfully')
       queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Procurement deleted successfully')
+    },
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+}
+export const useVerifyLevel1 = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data
+    }: {
+      id: string
+      data: { signature?: string; remarks?: string }
+    }) => verifyLevel1(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Successfully verified level 1')
+    },
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+}
+
+export const useVerifyLevel2 = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data
+    }: {
+      id: string
+      data: { signature?: string; remarks?: string }
+    }) => verifyLevel2(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Successfully verified level 2')
+    },
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+}
+
+export const useRejectLevel1 = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { remarks?: string } }) =>
+      rejectLevel1(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Successfully rejected level 1')
+    },
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  })
+}
+
+export const useRejectLevel2 = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { remarks?: string } }) =>
+      rejectLevel2(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['procurement'] })
+      toast.success('Successfully rejected level 2')
     },
     onError: (err) => {
       toast.error(err.message)

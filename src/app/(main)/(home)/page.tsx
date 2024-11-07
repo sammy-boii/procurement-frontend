@@ -7,14 +7,11 @@ import { DataTable } from './data-table'
 import { columns } from './columns'
 import { useGetProcurements } from '@/hooks/use-procurement'
 import GiantSpinner from '@/components/elements/GiantSpinner'
-import { TProcurement } from '@/types/procurement.types'
 
 export default function HomePage() {
   const { data, isPending } = useGetProcurements()
 
   if (isPending) return <GiantSpinner />
-
-  console.log(data)
 
   return (
     <main>

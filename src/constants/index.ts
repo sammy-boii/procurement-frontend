@@ -48,7 +48,7 @@ export const sidebarLinks: ISidebarLinks[] = [
   },
   {
     title: 'My Procurements',
-    url: '/my-procurements',
+    url: '/my-procurement',
     icon: LayoutList
   }
 ] as const

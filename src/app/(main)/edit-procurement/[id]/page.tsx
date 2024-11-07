@@ -20,7 +20,6 @@ const EditProcurementPage = ({
 
   if (isProcurementPending || isRequestorPending) return <GiantSpinner />
 
-  console.log(procurement)
   return (
     <CreateProcurement
       edit

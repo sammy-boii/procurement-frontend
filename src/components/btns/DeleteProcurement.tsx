@@ -2,7 +2,6 @@
 
 import { Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
-import { deleteProcurement } from '@/api/actions/procurement-actions'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,13 +13,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
+import { useDeleteProcurement } from '@/hooks/use-procurement'
 
 const DeleteProcurement = ({ id }: { id: string }) => {
+  const { mutate } = useDeleteProcurement()
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
         <Button
-          onClick={() => deleteProcurement(id)}
           variant={'actions'}
           className='text-destructive hover:bg-red-200'
         >
@@ -38,7 +39,10 @@ const DeleteProcurement = ({ id }: { id: string }) => {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Button className='text-destructive-foreground hover:text-destructive-foreground hover:bg-red-700 bg-destructive'>
+            <Button
+              onClick={() => mutate(id)}
+              className='text-destructive-foreground hover:text-destructive-foreground hover:bg-red-700 bg-destructive'
+            >
               Delete
             </Button>
           </AlertDialogAction>

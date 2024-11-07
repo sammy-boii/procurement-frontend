@@ -9,12 +9,12 @@ interface IRes<T> {
 
 export const useGetProfile = () =>
   useQuery<IRes<TUser>>({
-    queryKey: ['profile', 'user'],
+    queryKey: ['profile'],
     queryFn: () => getProfile()
   })
 
-export const useGetUserById = (id: string) =>
+export const useGetUserById = (id: string | undefined) =>
   useQuery<IRes<TUser>>({
-    queryKey: ['user'],
-    queryFn: () => getUserById(id)
+    queryKey: ['user', id],
+    queryFn: () => (id ? getUserById(id) : Promise.reject('No ID provided'))
   })

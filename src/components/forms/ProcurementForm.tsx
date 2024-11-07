@@ -41,6 +41,10 @@ import {
 import { DEPARTMENTS } from '@/constants'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
+import {
+  useCreateProcurement,
+  useUpdateProcurement
+} from '@/hooks/use-procurement'
 
 export const newItem: TPurchaseOrderItem = {
   name: '',
@@ -73,6 +77,9 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
 
   const router = useRouter()
 
+  const { mutate: createProcurement } = useCreateProcurement()
+  const { mutate: updateProcurement } = useUpdateProcurement()
+
   const form = useForm<TProcurement>({
     resolver: zodResolver(procurementSchema),
     defaultValues: defaultData
@@ -97,12 +104,10 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
 
     try {
       if (props.edit) {
-        await updateProcurement(props.id, finalData)
-        toast.success('Procurement updated successfully')
+        updateProcurement({ id: props.id, newProcurement: finalData })
         router.replace('/')
       } else {
-        await createProcurement(finalData)
-        toast.success('Procurement created successfully')
+        createProcurement(finalData)
         router.replace('/')
       }
     } catch (err) {
@@ -331,7 +336,7 @@ export const CreateProcurement = (props: IEditProps | ICreateProps) => {
           disabled={form.formState.isSubmitting}
           type='submit'
         >
-          Submit
+          {props.edit ? 'Update' : 'Create'}
         </Button>
       </form>
     </Form>

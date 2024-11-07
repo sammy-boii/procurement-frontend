@@ -90,8 +90,6 @@ const SignaturePad = ({
       const isEmpty =
         pixelData && Array.from(pixelData).every((value) => value === 0)
 
-      console.log(isEmpty)
-
       // if (isEmpty) {
       //   setSignature(undefined)
       // } else {

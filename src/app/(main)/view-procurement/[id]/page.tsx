@@ -29,24 +29,29 @@ export default function ViewProcurementPage({
   // ts cannot auto infer filter()
 
   const { data: requestor, isPending: isRequestorPending } = useGetUserById(
-    data?.data.requestor || ''
+    data?.data.requestor
   )
   const { data: approver1, isPending: isApprover1Pending } = useGetUserById(
-    data?.data.approvedBy?.level1 || ''
+    data?.data.approvedBy?.level1
   )
   const { data: approver2, isPending: isApprover2Pending } = useGetUserById(
-    data?.data.approvedBy?.level1 || ''
+    data?.data.approvedBy?.level2
   )
+
+  console.log(data?.data.approvedBy?.level2, 'LELVE@')
 
   if (
     isProfilePending ||
     isRequestorPending ||
     isApprover1Pending ||
-    isApprover2Pending
+    isApprover2Pending ||
+    isProcurementPending
   )
     return <GiantSpinner />
 
   const approvers = [approver1, approver2]
+
+  console.log(approvers)
   return (
     <main className='mb-10'>
       <header>
@@ -235,7 +240,7 @@ export default function ViewProcurementPage({
           <Row fullWidth>
             <div className='space-x-2'>
               <span>Total Amout Excluding VAT:</span>
-              <span>{formatCurrency(data?.data.totalNetPrice || 0)}</span>
+              <span>Rs. {formatCurrency(data?.data.totalNetPrice || 0)}</span>
             </div>
           </Row>
         </tbody>
@@ -246,9 +251,9 @@ export default function ViewProcurementPage({
 
       <VerificationRow
         id={id}
-        data={data!.data}
-        profile={profile!.data}
-        approvers={approvers as IRes[]}
+        data={data?.data}
+        profile={profile?.data}
+        approvers={approvers}
       />
     </main>
   )
